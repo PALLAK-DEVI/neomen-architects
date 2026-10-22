@@ -9,6 +9,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- 3D Graphics Engine & Animation Controllers -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="js/villa-3d.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -64,6 +69,109 @@
 </head>
 <body class="antialiased selection:bg-bronze selection:text-white">
 
+    <!-- ========================================== -->
+    <!-- LAYER 1: 3D SCROLL-ANIMATED ARCHITECTURAL LANDING PAGE -->
+    <!-- ========================================== -->
+    <div id="landingLayer" class="relative w-full bg-[#F7F5F0] text-charcoal select-none">
+        
+        <!-- Top Fixed Navigation Bar -->
+        <header class="fixed top-0 left-0 w-full z-40 px-6 md:px-12 py-6 flex justify-between items-center pointer-events-none">
+            <!-- Top Left: VIEW MORE & HOME Icon -->
+            <div class="flex items-center space-x-3 pointer-events-auto">
+                <button id="viewMoreBtn" 
+                        class="group flex items-center space-x-2.5 px-6 py-3 bg-charcoal text-alabaster text-xs tracking-widest uppercase font-medium hover:bg-bronze transition-all duration-300 shadow-xl cursor-pointer">
+                    <span>View More</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+                </button>
+                
+                <button id="landingHomeBtn" 
+                        class="w-11 h-11 flex items-center justify-center bg-charcoal text-alabaster hover:bg-bronze transition-all duration-300 shadow-xl cursor-pointer" 
+                        title="Reset House to Assembled" 
+                        aria-label="Reset to Assembled View">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Top Right: Studio Identity & Reference Storyboard Trigger -->
+            <div class="flex items-center space-x-4 pointer-events-auto">
+                <div class="text-right hidden sm:block">
+                    <span class="font-serif-title text-xl font-light tracking-widest text-charcoal uppercase">NEOMEN STUDIO</span>
+                    <span class="block text-[10px] tracking-widest text-bronze uppercase font-mono">Villa Solstice • 3D Cutaway</span>
+                </div>
+                <button id="openStoryboardBtn" 
+                        class="flex items-center space-x-2 px-4 py-2.5 bg-travertine/90 hover:bg-sandstone text-charcoal border border-sandstone/80 text-[10px] tracking-widest uppercase font-medium shadow-sm transition-all cursor-pointer">
+                    <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-bronze"></i>
+                    <span class="hidden md:inline">Reference Storyboard</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sticky 3D WebGL Canvas Viewport -->
+        <div class="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+            <!-- Canvas Container -->
+            <div id="webglContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+            <!-- Stage HUD (Bottom Left) -->
+            <div class="absolute bottom-8 left-6 md:left-12 z-20 pointer-events-none max-w-sm md:max-w-md">
+                <div class="bg-alabaster/90 backdrop-blur-md border border-sandstone/80 p-5 shadow-2xl">
+                    <div class="flex items-center justify-between gap-4 mb-2">
+                        <span id="stageBadge" class="text-[10px] tracking-widest uppercase font-mono px-2.5 py-0.5 bg-bronze/15 text-bronze font-semibold">Stage 01 / 05</span>
+                        <span id="stageProgress" class="text-[10px] tracking-widest uppercase font-mono text-warmgray">0% Exploded</span>
+                    </div>
+                    <h2 id="stageTitle" class="font-serif-title text-2xl md:text-3xl font-light text-charcoal mb-1">1. Fully Assembled Residence</h2>
+                    <p id="stageDesc" class="text-xs text-warmgray font-light leading-relaxed">Contemporary luxury villa featuring cantilevered concrete volumes, floor-to-ceiling glass curtain walls, and warm cedar wood cladding.</p>
+                </div>
+            </div>
+
+            <!-- Architectural Callout Labels (Pins) that fade in when exploded -->
+            <div id="calloutPins" class="absolute inset-0 pointer-events-none z-10 transition-opacity duration-700 opacity-0">
+                <!-- Pin 1: Overlapping Roof Slab -->
+                <div class="absolute top-[18%] right-[12%] md:right-[26%] flex items-center gap-2 bg-charcoal/80 backdrop-blur-md text-alabaster border border-alabaster/20 px-3 py-1.5 text-[10px] tracking-wider uppercase font-mono shadow-xl">
+                    <span class="w-2 h-2 rounded-full bg-bronze animate-pulse"></span>
+                    <span>01. Overlapping Roof Slab & Canopy</span>
+                </div>
+                <!-- Pin 2: Upper Bedroom Suite -->
+                <div class="absolute top-[36%] left-[8%] md:left-[18%] flex items-center gap-2 bg-charcoal/80 backdrop-blur-md text-alabaster border border-alabaster/20 px-3 py-1.5 text-[10px] tracking-wider uppercase font-mono shadow-xl">
+                    <span class="w-2 h-2 rounded-full bg-bronze animate-pulse"></span>
+                    <span>02. Cantilevered Suites & Teak Louvers</span>
+                </div>
+                <!-- Pin 3: Living & Stairs -->
+                <div class="absolute bottom-[35%] right-[10%] md:right-[22%] flex items-center gap-2 bg-charcoal/80 backdrop-blur-md text-alabaster border border-alabaster/20 px-3 py-1.5 text-[10px] tracking-wider uppercase font-mono shadow-xl">
+                    <span class="w-2 h-2 rounded-full bg-bronze animate-pulse"></span>
+                    <span>03. Living Pavilion & Floating Teak Stairs</span>
+                </div>
+                <!-- Pin 4: Subterranean Garage -->
+                <div class="absolute bottom-[16%] left-[10%] md:left-[22%] flex items-center gap-2 bg-charcoal/80 backdrop-blur-md text-alabaster border border-alabaster/20 px-3 py-1.5 text-[10px] tracking-wider uppercase font-mono shadow-xl">
+                    <span class="w-2 h-2 rounded-full bg-bronze animate-pulse"></span>
+                    <span>04. Subterranean Vault & Twin Coupe Garage</span>
+                </div>
+            </div>
+
+            <!-- Scroll Prompt Indicator (Bottom Right) -->
+            <div id="scrollPrompt" class="absolute bottom-8 right-6 md:right-12 z-20 flex flex-col items-center pointer-events-none transition-opacity duration-500">
+                <span class="text-[9px] tracking-widest uppercase font-mono text-warmgray mb-2">Scroll To Explode</span>
+                <div class="w-[1px] h-12 bg-sandstone relative overflow-hidden">
+                    <div class="w-full h-5 bg-bronze absolute top-0 animate-bounce"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Virtual Scroll Track (400vh for ultra-smooth continuous bidirectional animation) -->
+        <div id="scrollTrack" class="h-[400vh] w-full pointer-events-none relative">
+            <div class="absolute bottom-16 left-0 w-full flex justify-center pointer-events-auto">
+                <button id="endExploreBtn" class="group px-8 py-4 bg-charcoal text-alabaster hover:bg-bronze transition-all duration-300 text-xs tracking-widest uppercase font-medium shadow-2xl flex items-center space-x-3 cursor-pointer">
+                    <span>Enter Architecture Studio</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- LAYER 2: EXISTING MAIN WEBSITE (PRESERVED 100%) -->
+    <!-- ========================================== -->
+    <div id="websiteLayer" class="relative w-full hidden">
+
     <!-- NAVIGATION BAR -->
     <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-6 px-6 md:px-12 flex justify-between items-center text-charcoal">
         <a href="#" class="flex items-center gap-2 group">
@@ -72,6 +180,7 @@
         </a>
 
         <nav class="hidden lg:flex items-center space-x-10 text-xs tracking-widest uppercase font-medium">
+            <a href="#landing" id="nav3DModelBtn" class="flex items-center gap-1.5 text-bronze hover:text-charcoal transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all"><i data-lucide="box" class="w-3.5 h-3.5"></i> <span>3D Villa</span></a>
             <a href="#about" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">About</a>
             <a href="#projects" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">Portfolio</a>
             <a href="#services" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">Services</a>
@@ -101,6 +210,7 @@
             </button>
         </div>
         <nav class="flex flex-col space-y-6 text-xl font-serif-title tracking-wider">
+            <a href="#landing" id="mobile3DModelBtn" class="mobile-link text-bronze flex items-center gap-2 hover:text-alabaster transition-colors"><i data-lucide="box" class="w-5 h-5"></i> 00. 3D Villa Experience</a>
             <a href="#about" class="mobile-link hover:text-bronze transition-colors">01. Studio & Philosophy</a>
             <a href="#projects" class="mobile-link hover:text-bronze transition-colors">02. Selected Portfolio</a>
             <a href="#services" class="mobile-link hover:text-bronze transition-colors">03. Expertise & Practice</a>
@@ -724,6 +834,39 @@
             </div>
         </div>
     </footer>
+    </div>
+    <!-- END OF LAYER 2 -->
+
+    <!-- REFERENCE STORYBOARD LIGHTBOX MODAL -->
+    <div id="storyboardModal" class="fixed inset-0 bg-charcoal/95 backdrop-blur-lg z-50 hidden flex flex-col p-4 md:p-8 text-alabaster">
+        <div class="flex items-center justify-between border-b border-sandstone/30 pb-4 mb-4">
+            <div>
+                <span class="text-[10px] tracking-widest uppercase text-bronze font-mono">Design Blueprint & References</span>
+                <h2 class="font-serif-title text-2xl md:text-3xl font-light">Architectural Exploded Cutaway Storyboard</h2>
+            </div>
+            <button id="closeStoryboardBtn" class="w-10 h-10 flex items-center justify-center text-alabaster hover:text-bronze border border-alabaster/20 hover:border-bronze transition-all cursor-pointer">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
+            <div class="bg-charcoal/60 border border-sandstone/20 p-4">
+                <p class="text-xs uppercase tracking-widest text-bronze mb-2">Stage Breakdown 1 to 8 (Sequence Guide)</p>
+                <img src="assets/storyboard_4.jpg" alt="8 Stage Sequence Guide" class="w-full h-auto object-contain rounded-sm">
+            </div>
+            <div class="bg-charcoal/60 border border-sandstone/20 p-4">
+                <p class="text-xs uppercase tracking-widest text-bronze mb-2">Architectural Cutaway Axonometric (Interior Views)</p>
+                <img src="assets/storyboard_1.jpg" alt="Architectural Cutaway Axonometric" class="w-full h-auto object-contain rounded-sm">
+            </div>
+            <div class="bg-charcoal/60 border border-sandstone/20 p-4">
+                <p class="text-xs uppercase tracking-widest text-bronze mb-2">Exploded Layer Separation Detail</p>
+                <img src="assets/storyboard_2.jpg" alt="Exploded Layer Separation Detail" class="w-full h-auto object-contain rounded-sm">
+            </div>
+            <div class="bg-charcoal/60 border border-sandstone/20 p-4">
+                <p class="text-xs uppercase tracking-widest text-bronze mb-2">High-Resolution Hero Rendering</p>
+                <img src="assets/storyboard_3.jpg" alt="High-Resolution Hero Rendering" class="w-full h-auto object-contain rounded-sm">
+            </div>
+        </div>
+    </div>
 
     <!-- INTERACTIVE PROJECT MODAL CONTAINER -->
     <div id="projectModal" class="fixed inset-0 bg-charcoal/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 md:p-10">
@@ -741,6 +884,185 @@
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
+
+        // 0. LAYER CONTROLLER & 3D VILLA SOLSTICE SHOWCASE
+        const landingLayer = document.getElementById('landingLayer');
+        const websiteLayer = document.getElementById('websiteLayer');
+        const webglContainer = document.getElementById('webglContainer');
+        const scrollTrack = document.getElementById('scrollTrack');
+        const stageBadge = document.getElementById('stageBadge');
+        const stageProgress = document.getElementById('stageProgress');
+        const stageTitle = document.getElementById('stageTitle');
+        const stageDesc = document.getElementById('stageDesc');
+        const calloutPins = document.getElementById('calloutPins');
+        const scrollPrompt = document.getElementById('scrollPrompt');
+
+        const stageDescriptions = {
+            1: {
+                badge: "Stage 01 / 05",
+                title: "1. Fully Assembled Residence",
+                desc: "Contemporary luxury villa featuring cantilevered concrete volumes, floor-to-ceiling glass curtain walls, and warm cedar wood cladding."
+            },
+            2: {
+                badge: "Stage 02 / 05",
+                title: "2. Roof Slabs & Canopy Lift",
+                desc: "Flat cantilevered roof slab and rooftop pavilion elevate upward along the vertical axis, exposing the upper living volume."
+            },
+            3: {
+                badge: "Stage 03 / 05",
+                title: "3. Façade & Wall Separation",
+                desc: "Left and right cantilevered bedroom wings and vertical wall panels translate horizontally outward, opening the structure."
+            },
+            4: {
+                badge: "Stage 04 / 05",
+                title: "4. Vertical Floor Slabs Split",
+                desc: "Floor slabs separate vertically, revealing the double-height living room, floating teakwood stairs, and open kitchen island."
+            },
+            5: {
+                badge: "Stage 05 / 05",
+                title: "5. Complete Interior Cutaway Reveal",
+                desc: "Full architectural cutaway revealed: subterranean twin coupe garage, private library, living salon, and master suite in engineered alignment."
+            }
+        };
+
+        let villaScene = null;
+        if (webglContainer && window.Villa3DScene) {
+            villaScene = new window.Villa3DScene(webglContainer, {
+                onProgressChange: function(progress) {
+                    if (stageProgress) {
+                        stageProgress.textContent = Math.round(progress * 100) + '% Exploded';
+                    }
+                    if (calloutPins) {
+                        if (progress > 0.25) {
+                            calloutPins.classList.remove('opacity-0');
+                            calloutPins.classList.add('opacity-100');
+                        } else {
+                            calloutPins.classList.remove('opacity-100');
+                            calloutPins.classList.add('opacity-0');
+                        }
+                    }
+                    if (scrollPrompt) {
+                        if (progress > 0.85) {
+                            scrollPrompt.classList.add('opacity-0');
+                        } else {
+                            scrollPrompt.classList.remove('opacity-0');
+                        }
+                    }
+                },
+                onStageChange: function(stageNum) {
+                    const data = stageDescriptions[stageNum];
+                    if (data && stageBadge && stageTitle && stageDesc) {
+                        stageBadge.textContent = data.badge;
+                        stageTitle.textContent = data.title;
+                        stageDesc.textContent = data.desc;
+                    }
+                }
+            });
+        }
+
+        // Continuous Bidirectional Scroll Synchronization
+        function handleLandingScroll() {
+            if (!landingLayer || landingLayer.classList.contains('hidden') || !villaScene) return;
+            const maxScroll = scrollTrack.offsetHeight - window.innerHeight;
+            if (maxScroll <= 0) return;
+            const progress = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+            villaScene.setScrollProgress(progress);
+        }
+
+        window.addEventListener('scroll', handleLandingScroll, { passive: true });
+
+        // Layer Switching Routing
+        function showWebsiteLayer(targetHash) {
+            if (landingLayer) landingLayer.classList.add('hidden');
+            if (websiteLayer) websiteLayer.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            lucide.createIcons();
+
+            if (targetHash && targetHash !== '#website') {
+                setTimeout(() => {
+                    const targetEl = document.querySelector(targetHash);
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 60);
+            }
+            if (history.pushState) {
+                history.pushState(null, null, targetHash || '#about');
+            }
+        }
+
+        function showLandingLayer() {
+            if (websiteLayer) websiteLayer.classList.add('hidden');
+            if (landingLayer) landingLayer.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            if (villaScene) {
+                villaScene.resetHome();
+            }
+            lucide.createIcons();
+            if (history.pushState) {
+                history.pushState(null, null, ' ');
+            }
+        }
+
+        // VIEW MORE button
+        document.getElementById('viewMoreBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showWebsiteLayer('#about');
+        });
+
+        // Bottom CTA button
+        document.getElementById('endExploreBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showWebsiteLayer('#about');
+        });
+
+        // Home Icon button (Landing Page)
+        document.getElementById('landingHomeBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (villaScene) {
+                villaScene.resetHome();
+            }
+        });
+
+        // 3D Villa Return Link on Website Navbar
+        document.getElementById('nav3DModelBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showLandingLayer();
+        });
+
+        // 3D Villa Return Link on Mobile Menu
+        document.getElementById('mobile3DModelBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const mobileNav = document.getElementById('mobileMenu');
+            if (mobileNav) mobileNav.classList.add('translate-x-full');
+            showLandingLayer();
+        });
+
+        // Storyboard Lightbox Modal Handlers
+        const storyboardModal = document.getElementById('storyboardModal');
+        const openStoryboardBtn = document.getElementById('openStoryboardBtn');
+        const closeStoryboardBtn = document.getElementById('closeStoryboardBtn');
+
+        openStoryboardBtn?.addEventListener('click', () => {
+            storyboardModal.classList.remove('hidden');
+        });
+        closeStoryboardBtn?.addEventListener('click', () => {
+            storyboardModal.classList.add('hidden');
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && storyboardModal && !storyboardModal.classList.contains('hidden')) {
+                storyboardModal.classList.add('hidden');
+            }
+        });
+
+        // Hash Routing Check on Load
+        const currentHash = window.location.hash;
+        if (['#about', '#projects', '#services', '#materials', '#calculator', '#journal', '#contact', '#website'].includes(currentHash)) {
+            showWebsiteLayer(currentHash);
+        } else {
+            showLandingLayer();
+        }
 
         // 1. Mobile Menu Toggle
         const menuBtn = document.getElementById('menuBtn');
