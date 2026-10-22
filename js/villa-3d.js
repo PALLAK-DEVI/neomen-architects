@@ -32,8 +32,8 @@
             // 1. Scene setup
             this.scene = new THREE.Scene();
             
-            // Atmospheric golden-hour fog
-            this.scene.fog = new THREE.FogExp2(0xE8D5C0, 0.0075);
+            // Atmospheric soft champagne golden-hour fog
+            this.scene.fog = new THREE.FogExp2(0xE0DCD0, 0.0072);
 
             // 2. Camera setup (Classic high-angle architectural axonometric matching reference render)
             this.camera = new THREE.PerspectiveCamera(34, width / height, 0.1, 1000);
@@ -53,7 +53,7 @@
             this.renderer.shadowMap.enabled = true;
             this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            this.renderer.toneMappingExposure = 1.28;
+            this.renderer.toneMappingExposure = 1.24;
             this.container.appendChild(this.renderer.domElement);
 
             // 4. Generate Procedural PBR Textures & Environment Panorama
@@ -151,32 +151,32 @@
             slateTex.repeat.set(3, 3);
             this.textures.slate = slateTex;
 
-            // 3. Architectural Warm Wood Brown Texture (1024x1024)
+            // 3. Architectural Honey-Teak Wood Texture (1024x1024)
             const canvasWood = document.createElement('canvas');
             canvasWood.width = 1024;
             canvasWood.height = 1024;
             const ctxW = canvasWood.getContext('2d');
-            // Base rich warm wood brown
-            ctxW.fillStyle = '#834F29';
+            // Base luminous honey-teak / warm amber cedar
+            ctxW.fillStyle = '#C47A3A';
             ctxW.fillRect(0, 0, 1024, 1024);
 
-            // Realistic vertical architectural wood planks & timber grain
+            // Realistic vertical architectural timber planks & grain
             for (let x = 0; x < 1024; x += 16) {
-                const shade = (Math.random() - 0.5) * 32;
-                const r = Math.round(131 + shade);
-                const g = Math.round(79 + shade * 0.7);
-                const b = Math.round(41 + shade * 0.5);
+                const shade = (Math.random() - 0.5) * 28;
+                const r = Math.round(196 + shade);
+                const g = Math.round(122 + shade * 0.7);
+                const b = Math.round(58 + shade * 0.45);
                 ctxW.fillStyle = `rgb(${r}, ${g}, ${b})`;
                 ctxW.fillRect(x, 0, 14, 1024);
-                // Subtle dark recessed groove between planks
-                ctxW.fillStyle = 'rgba(38, 20, 9, 0.55)';
+                // Subtle dark amber recessed groove between timber slats
+                ctxW.fillStyle = 'rgba(74, 38, 12, 0.45)';
                 ctxW.fillRect(x + 14, 0, 2, 1024);
             }
 
             // Fine organic wood grain lines
             for (let i = 0; i < 90; i++) {
                 const y = Math.random() * 1024;
-                ctxW.fillStyle = Math.random() > 0.5 ? 'rgba(54, 30, 13, 0.22)' : 'rgba(168, 110, 62, 0.25)';
+                ctxW.fillStyle = Math.random() > 0.5 ? 'rgba(84, 45, 16, 0.22)' : 'rgba(235, 165, 95, 0.28)';
                 ctxW.fillRect(0, y, 1024, Math.random() * 3 + 1);
             }
             const woodTex = new THREE.CanvasTexture(canvasWood);
@@ -220,7 +220,37 @@
             travTex.repeat.set(3, 3);
             this.textures.travertine = travTex;
 
-            // 5. Dark Quartz Countertop
+            // 5. Natural Sage Meadow Grass Ground Texture (1024x1024)
+            const canvasMeadow = document.createElement('canvas');
+            canvasMeadow.width = 1024;
+            canvasMeadow.height = 1024;
+            const ctxM = canvasMeadow.getContext('2d');
+            ctxM.fillStyle = '#8E9A75'; // Soft sage-olive meadow grass
+            ctxM.fillRect(0, 0, 1024, 1024);
+
+            // Natural organic grass stipples and tones
+            for (let i = 0; i < 6000; i++) {
+                const rx = Math.random() * 1024;
+                const ry = Math.random() * 1024;
+                const rw = Math.random() * 4 + 1;
+                const rh = Math.random() * 5 + 1;
+                const randChoice = Math.random();
+                if (randChoice < 0.35) {
+                    ctxM.fillStyle = 'rgba(115, 128, 96, 0.35)'; // deeper olive
+                } else if (randChoice < 0.7) {
+                    ctxM.fillStyle = 'rgba(164, 178, 140, 0.38)'; // lighter sage
+                } else {
+                    ctxM.fillStyle = 'rgba(202, 198, 160, 0.25)'; // warm straw sunlight accent
+                }
+                ctxM.fillRect(rx, ry, rw, rh);
+            }
+            const meadowTex = new THREE.CanvasTexture(canvasMeadow);
+            meadowTex.wrapS = THREE.RepeatWrapping;
+            meadowTex.wrapT = THREE.RepeatWrapping;
+            meadowTex.repeat.set(8, 8);
+            this.textures.meadow = meadowTex;
+
+            // 6. Dark Quartz Countertop
             const canvasQuartz = document.createElement('canvas');
             canvasQuartz.width = 512;
             canvasQuartz.height = 512;
@@ -239,59 +269,58 @@
         }
 
         initEnvironment() {
-            // Golden-Hour Horizon & Mountain Panorama Canvas
+            // Soft Champagne Daylight Horizon & Rolling Misty Hills Panorama
             const canvasPano = document.createElement('canvas');
             canvasPano.width = 2048;
             canvasPano.height = 1024;
             const ctxP = canvasPano.getContext('2d');
 
-            // Sky vertical sunset gradient
+            // Sky vertical soft champagne daylight gradient
             const skyGrad = ctxP.createLinearGradient(0, 0, 0, 620);
-            skyGrad.addColorStop(0.0, '#364052'); // Upper twilight slate blue
-            skyGrad.addColorStop(0.35, '#76626C'); // Dusky rose
-            skyGrad.addColorStop(0.60, '#BF8669'); // Warm terracotta
-            skyGrad.addColorStop(0.80, '#E6AB6D'); // Amber gold
-            skyGrad.addColorStop(0.95, '#F5CE98'); // Sunset radiance
-            skyGrad.addColorStop(1.0, '#FEE4C8'); // Low horizon champagne
+            skyGrad.addColorStop(0.0, '#C2C9BA'); // Pale silver-sage upper daylight sky
+            skyGrad.addColorStop(0.35, '#D5DACD'); // Light misty sage champagne
+            skyGrad.addColorStop(0.65, '#E4DFD3'); // Soft warm champagne ambiance
+            skyGrad.addColorStop(0.85, '#EFEAE0'); // Luminous daylight radiance
+            skyGrad.addColorStop(1.0, '#FAF6ED'); // Horizon pale champagne light
             ctxP.fillStyle = skyGrad;
             ctxP.fillRect(0, 0, 2048, 620);
 
-            // Sun glow on the right
-            const sunGlow = ctxP.createRadialGradient(1650, 540, 10, 1650, 540, 480);
-            sunGlow.addColorStop(0, 'rgba(255, 250, 220, 0.95)');
-            sunGlow.addColorStop(0.3, 'rgba(255, 215, 140, 0.6)');
-            sunGlow.addColorStop(0.7, 'rgba(235, 160, 95, 0.2)');
-            sunGlow.addColorStop(1, 'rgba(235, 160, 95, 0)');
+            // Sun glow in upper right matching reference lighting
+            const sunGlow = ctxP.createRadialGradient(1620, 480, 10, 1620, 480, 500);
+            sunGlow.addColorStop(0, 'rgba(255, 250, 230, 0.90)');
+            sunGlow.addColorStop(0.3, 'rgba(250, 230, 185, 0.45)');
+            sunGlow.addColorStop(0.7, 'rgba(235, 215, 175, 0.15)');
+            sunGlow.addColorStop(1, 'rgba(235, 215, 175, 0)');
             ctxP.fillStyle = sunGlow;
             ctxP.fillRect(0, 0, 2048, 620);
 
-            // Layer 1: Distant subtle mountain ridges (Furthest)
-            ctxP.fillStyle = '#837482';
+            // Layer 1: Distant soft sage-gray mountain ridge
+            ctxP.fillStyle = '#ACB29F';
             ctxP.beginPath();
-            ctxP.moveTo(0, 540);
-            ctxP.bezierCurveTo(400, 480, 800, 530, 1200, 490);
-            ctxP.bezierCurveTo(1500, 460, 1800, 500, 2048, 520);
+            ctxP.moveTo(0, 535);
+            ctxP.bezierCurveTo(400, 475, 800, 525, 1200, 485);
+            ctxP.bezierCurveTo(1500, 455, 1800, 495, 2048, 515);
             ctxP.lineTo(2048, 620);
             ctxP.lineTo(0, 620);
             ctxP.closePath();
             ctxP.fill();
 
-            // Layer 2: Middle mountain ridge bathed in warm haze
-            ctxP.fillStyle = '#735F5E';
+            // Layer 2: Middle rolling hills in soft olive-sage
+            ctxP.fillStyle = '#97A287';
             ctxP.beginPath();
-            ctxP.moveTo(0, 570);
-            ctxP.bezierCurveTo(350, 530, 700, 560, 1100, 520);
-            ctxP.bezierCurveTo(1450, 495, 1750, 545, 2048, 550);
+            ctxP.moveTo(0, 565);
+            ctxP.bezierCurveTo(350, 525, 700, 555, 1100, 515);
+            ctxP.bezierCurveTo(1450, 490, 1750, 540, 2048, 545);
             ctxP.lineTo(2048, 620);
             ctxP.lineTo(0, 620);
             ctxP.closePath();
             ctxP.fill();
 
-            // Layer 3: Near rolling hillside terrain with forest texture
+            // Layer 3: Near rolling hillside meadow terrain
             const hillGrad = ctxP.createLinearGradient(0, 560, 0, 1024);
-            hillGrad.addColorStop(0, '#53463E');
-            hillGrad.addColorStop(0.3, '#3A422D');
-            hillGrad.addColorStop(1.0, '#242B1D');
+            hillGrad.addColorStop(0, '#7F8D6F');
+            hillGrad.addColorStop(0.4, '#6B7A5C');
+            hillGrad.addColorStop(1.0, '#4E5B42');
             ctxP.fillStyle = hillGrad;
             ctxP.beginPath();
             ctxP.moveTo(0, 595);
@@ -317,20 +346,20 @@
                 metalness: 0.05
             });
 
-            // Rich Architectural Wood Brown for outer house walls & exterior panels
+            // Luminous Architectural Honey-Teak Wood for outer house walls & exterior panels
             this.matWoodWall = new THREE.MeshStandardMaterial({
-                color: 0x86522B, // Warm rich wood brown
+                color: 0xC57C3D, // Warm vibrant honey-teak / amber cedar
                 map: this.textures.wood,
-                roughness: 0.44,
-                metalness: 0.05
+                roughness: 0.40,
+                metalness: 0.04
             });
 
-            // Deep Architectural Wood Brown for structural outer pillars & pylons
+            // Solid Honey-Teak / Amber Cedar Timber for structural outer pillars & pylons
             this.matWoodPillar = new THREE.MeshStandardMaterial({
-                color: 0x764621, // Deep solid timber/walnut pillar brown
+                color: 0xB87032, // Solid warm honey-teak timber pillar
                 map: this.textures.wood,
-                roughness: 0.42,
-                metalness: 0.06
+                roughness: 0.38,
+                metalness: 0.05
             });
 
             // Dark architectural concrete for retaining walls
@@ -343,7 +372,7 @@
 
             // Dark charcoal stone / slate for main roof slabs
             this.matSlateRoof = new THREE.MeshStandardMaterial({
-                color: 0x2A2C30,
+                color: 0x24262A,
                 map: this.textures.slate,
                 roughness: 0.65,
                 metalness: 0.15
@@ -351,26 +380,26 @@
 
             // Refined Architectural Off-White Stone Flooring
             this.matFloorOffWhite = new THREE.MeshStandardMaterial({
-                color: 0xFAF8F5, // Luminous, pristine off-white
+                color: 0xF7F5EF, // Luminous, pristine architectural off-white
                 map: this.textures.travertine,
-                roughness: 0.32,
+                roughness: 0.30,
                 metalness: 0.03
             });
 
             // Natural off-white travertine stone flooring & podium
             this.matTravertine = new THREE.MeshStandardMaterial({
-                color: 0xFAF8F5,
+                color: 0xF5F3EC,
                 map: this.textures.travertine,
-                roughness: 0.36,
+                roughness: 0.35,
                 metalness: 0.03
             });
 
-            // Warm teakwood & walnut vertical grain cladding
+            // Warm honey-teak vertical grain cladding
             this.matWood = new THREE.MeshStandardMaterial({
-                color: 0x86522B,
+                color: 0xC57C3D,
                 map: this.textures.wood,
-                roughness: 0.44,
-                metalness: 0.05
+                roughness: 0.40,
+                metalness: 0.04
             });
 
             // Smoked dark oak for interior furniture
@@ -381,18 +410,26 @@
                 metalness: 0.05
             });
 
+            // Soft sage-olive natural meadow ground material
+            this.matMeadow = new THREE.MeshStandardMaterial({
+                color: 0x8E9A75,
+                map: this.textures.meadow,
+                roughness: 0.88,
+                metalness: 0.0
+            });
+
             // Floor-to-ceiling glass with realistic reflections & transparency
             this.matGlass = new THREE.MeshPhysicalMaterial ? new THREE.MeshPhysicalMaterial({
-                color: 0xE2F2F8,
+                color: 0xE6F2F5,
                 transparent: true,
-                opacity: 0.38,
+                opacity: 0.35,
                 roughness: 0.04,
                 metalness: 0.15,
-                transmission: 0.84,
+                transmission: 0.85,
                 ior: 1.52,
                 reflectivity: 0.95
             }) : new THREE.MeshStandardMaterial({
-                color: 0xE2F2F8,
+                color: 0xE6F2F5,
                 transparent: true,
                 opacity: 0.35,
                 roughness: 0.05,
@@ -423,20 +460,27 @@
 
             // Infinity pool water with sky reflections
             this.matWater = new THREE.MeshStandardMaterial({
-                color: 0x427A8A,
+                color: 0x3E7888,
                 roughness: 0.06,
                 metalness: 0.75
             });
 
-            // Mediterranean hillside tree foliage
+            // Stylized architectural evergreen conifer/pine foliage in soft sage-olive
             this.matFoliage = new THREE.MeshStandardMaterial({
-                color: 0x36482C,
-                roughness: 0.85,
+                color: 0x7E966B, // Soft sage-olive green matching screenshot
+                roughness: 0.82,
                 metalness: 0.0
             });
             this.matTrunk = new THREE.MeshStandardMaterial({
-                color: 0x3E3025,
-                roughness: 0.9
+                color: 0x48382B,
+                roughness: 0.88
+            });
+
+            // Landscape river stones & gravel
+            this.matRock = new THREE.MeshStandardMaterial({
+                color: 0x8A887E,
+                roughness: 0.78,
+                metalness: 0.05
             });
 
             // Luxury furniture fabrics
@@ -580,6 +624,14 @@
         buildPlinthAndLandscape() {
             const plinthGroup = new THREE.Group();
 
+            // Natural soft sage meadow grass ground plane surrounding the villa
+            const meadowGeo = new THREE.PlaneGeometry(160, 160);
+            const meadow = new THREE.Mesh(meadowGeo, this.matMeadow);
+            meadow.rotation.x = -Math.PI / 2;
+            meadow.position.y = -2.48;
+            meadow.receiveShadow = true;
+            plinthGroup.add(meadow);
+
             // Stepped travertine architectural podium
             const baseGeo = new THREE.BoxGeometry(24, 0.55, 20);
             const base = new THREE.Mesh(baseGeo, this.matTravertine);
@@ -618,14 +670,46 @@
                 plinthGroup.add(led);
             }
 
-            // Surrounding Mediterranean pines & shrubbery flanking the terrace
+            // Decorative organic landscape river stones around the plinth edges
+            const rockGeo = new THREE.DodecahedronGeometry(0.35, 1);
+            const rockPositions = [
+                [-10.5, -2.35, 10.0, 1.2], [-9.8, -2.38, 10.5, 0.8], [-10.8, -2.4, 9.4, 0.6],
+                [9.5, -2.35, 10.2, 1.1], [10.2, -2.38, 9.8, 0.75], [9.1, -2.4, 10.8, 0.65],
+                [-6.2, -2.4, 11.2, 0.9], [-5.6, -2.42, 11.6, 0.55],
+                [5.2, -2.4, 11.4, 0.85], [5.9, -2.42, 11.8, 0.5]
+            ];
+            for (let r of rockPositions) {
+                const rock = new THREE.Mesh(rockGeo, this.matRock);
+                rock.scale.set(r[3], r[3] * 0.7, r[3]);
+                rock.position.set(r[0], r[1], r[2]);
+                rock.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+                rock.castShadow = true;
+                rock.receiveShadow = true;
+                plinthGroup.add(rock);
+            }
+
+            // Surrounding stylized architectural spruce/pine trees matching reference render
             const treePositions = [
-                [-12.5, -2.4, -6.0], [-13.2, -2.4, 0.0], [-12.8, -2.4, 6.5], [-11.0, -2.4, 11.5],
-                [13.5, -2.4, -6.5], [14.0, -2.4, 1.5], [13.2, -2.4, 7.5], [11.5, -2.4, 12.0],
-                [-5.0, -2.4, 12.5], [6.0, -2.4, 12.5]
+                // Front lawn edge
+                [-7.5, -2.48, 10.2, 1.05],
+                [-2.8, -2.48, 11.5, 0.92],
+                [2.8, -2.48, 11.8, 0.95],
+                [7.8, -2.48, 10.5, 1.02],
+                // Left pool terrace perimeter
+                [-12.5, -2.48, -4.0, 1.15],
+                [-13.2, -2.48, 2.5, 1.08],
+                [-12.2, -2.48, 8.0, 0.98],
+                [-11.2, -2.48, 11.8, 0.88],
+                // Right timber pylon perimeter
+                [13.5, -2.48, -2.0, 1.12],
+                [13.8, -2.48, 5.0, 1.05],
+                [11.8, -2.48, 9.8, 0.96],
+                // Rear backdrop
+                [-6.5, -2.48, -9.5, 1.2],
+                [6.0, -2.48, -9.5, 1.18]
             ];
             for (let pos of treePositions) {
-                const tree = this.createArchitecturalTree();
+                const tree = this.createArchitecturalTree(pos[3] || 1.0);
                 tree.position.set(pos[0], pos[1], pos[2]);
                 plinthGroup.add(tree);
             }
@@ -829,17 +913,18 @@
         }
 
         buildRightWing() {
-            // Cantilevered upper right volume with rich architectural wood brown
+            // Cantilevered upper right volume with warm honey-teak wood
             const woodBox = new THREE.Mesh(new THREE.BoxGeometry(5.6, 3.2, 6.2), this.matWoodWall);
             woodBox.position.set(7.8, 4.4, 2.0);
             woodBox.castShadow = true;
             this.rightWingGroup.add(woodBox);
 
-            // Three vertical architectural timber pillars / pylons in deep wood brown
-            for (let i = 0; i < 3; i++) {
-                const pylon = new THREE.Mesh(new THREE.BoxGeometry(1.2, 8.8, 1.2), this.matWoodPillar);
-                pylon.position.set(9.8 + i * 2.2, 2.6, 4.5 - i * 3.5);
+            // Rhythmic architectural timber pillars / vertical screen in warm honey-teakwood
+            for (let i = 0; i < 4; i++) {
+                const pylon = new THREE.Mesh(new THREE.BoxGeometry(0.85, 8.8, 0.85), this.matWoodPillar);
+                pylon.position.set(9.6 + i * 1.6, 2.6, 4.2 - i * 2.8);
                 pylon.castShadow = true;
+                pylon.receiveShadow = true;
                 this.rightWingGroup.add(pylon);
             }
 
@@ -950,21 +1035,32 @@
 
         // --- DETAILED OBJECT BUILDERS ---
 
-        createArchitecturalTree() {
+        createArchitecturalTree(scale = 1.0) {
             const tree = new THREE.Group();
-            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 2.2, 8), this.matTrunk);
-            trunk.position.y = 1.1;
+            tree.scale.setScalar(scale);
+
+            // Slender pine trunk
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.15, 1.6, 8), this.matTrunk);
+            trunk.position.y = 0.8;
             trunk.castShadow = true;
             tree.add(trunk);
 
-            // Layered foliage cones
-            for (let i = 0; i < 3; i++) {
+            // 4 overlapping flared conical tiers matching the architectural rendering in reference image
+            const tiers = [
+                { r: 1.25, h: 1.15, y: 1.35 },
+                { r: 1.02, h: 1.05, y: 2.10 },
+                { r: 0.78, h: 0.95, y: 2.80 },
+                { r: 0.52, h: 0.85, y: 3.40 }
+            ];
+
+            for (let t of tiers) {
                 const cone = new THREE.Mesh(
-                    new THREE.ConeGeometry(1.2 - i * 0.25, 1.5, 8),
+                    new THREE.ConeGeometry(t.r, t.h, 10),
                     this.matFoliage
                 );
-                cone.position.y = 2.0 + i * 0.8;
+                cone.position.y = t.y;
                 cone.castShadow = true;
+                cone.receiveShadow = true;
                 tree.add(cone);
             }
             return tree;

@@ -79,13 +79,13 @@
             <!-- Top Left: VIEW MORE & HOME Icon -->
             <div class="flex items-center space-x-2 md:space-x-3 pointer-events-auto">
                 <button id="viewMoreBtn" 
-                        class="group flex items-center space-x-1.5 md:space-x-2.5 px-3.5 py-2 md:px-6 md:py-3 bg-charcoal text-alabaster text-[10px] md:text-xs tracking-widest uppercase font-medium hover:bg-bronze transition-all duration-300 shadow-xl cursor-pointer">
+                        class="group flex items-center space-x-1.5 md:space-x-2.5 px-3.5 py-2 md:px-6 md:py-3 bg-[#20241E]/85 backdrop-blur-md border border-white/20 text-alabaster text-[10px] md:text-xs tracking-widest uppercase font-medium hover:bg-[#343A2F] transition-all duration-300 shadow-xl cursor-pointer">
                     <span>View More</span>
                     <i data-lucide="arrow-right" class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform group-hover:translate-x-1"></i>
                 </button>
                 
                 <button id="landingHomeBtn" 
-                        class="w-8 h-8 md:w-11 md:h-11 flex items-center justify-center bg-charcoal text-alabaster hover:bg-bronze transition-all duration-300 shadow-xl cursor-pointer" 
+                        class="w-8 h-8 md:w-11 md:h-11 flex items-center justify-center bg-[#20241E]/85 backdrop-blur-md border border-white/20 text-alabaster hover:bg-[#343A2F] transition-all duration-300 shadow-xl cursor-pointer" 
                         title="Reset House to Assembled" 
                         aria-label="Reset to Assembled View">
                     <i data-lucide="home" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
@@ -94,16 +94,16 @@
 
             <!-- Top Right: Mode Switcher, Studio Identity & Reference Storyboard Trigger -->
             <div class="flex items-center space-x-1.5 md:space-x-3 pointer-events-auto">
-                <div class="bg-charcoal/85 backdrop-blur-md p-0.5 md:p-1 border border-sandstone/30 flex items-center text-[9px] md:text-[10px] tracking-widest uppercase font-mono shadow-md">
+                <div class="bg-[#20241E]/85 backdrop-blur-md p-0.5 md:p-1 border border-white/20 flex items-center text-[9px] md:text-[10px] tracking-widest uppercase font-mono shadow-md">
                     <button id="mode3DBtn" class="px-2 py-1 md:px-3 md:py-1.5 bg-bronze text-alabaster transition-all cursor-pointer font-medium" title="Interactive 3D WebGL Model">3D<span class="hidden md:inline"> Model</span></button>
-                    <button id="modePhotoBtn" class="px-2 py-1 md:px-3 md:py-1.5 text-warmgray hover:text-alabaster transition-all cursor-pointer font-medium" title="Photorealistic Architectural Render View"><span class="hidden md:inline">Photorealistic </span>CGI</button>
+                    <button id="modePhotoBtn" class="px-2 py-1 md:px-3 md:py-1.5 text-white/70 hover:text-white transition-all cursor-pointer font-medium" title="Photorealistic Architectural Render View"><span class="hidden md:inline">Photorealistic </span>CGI</button>
                 </div>
                 <div class="text-right hidden sm:block">
-                    <span class="font-serif-title text-xl font-light tracking-widest text-charcoal uppercase">NEOMEN STUDIO</span>
+                    <span class="font-serif-title text-xl font-light tracking-widest text-[#20241E] uppercase">NEOMEN STUDIO</span>
                     <span class="block text-[10px] tracking-widest text-bronze uppercase font-mono">Villa Solstice • 3D Cutaway</span>
                 </div>
                 <button id="openStoryboardBtn" 
-                        class="flex items-center space-x-1.5 px-2.5 py-1.5 md:px-4 md:py-2.5 bg-travertine/90 hover:bg-sandstone text-charcoal border border-sandstone/80 text-[9px] md:text-[10px] tracking-widest uppercase font-medium shadow-sm transition-all cursor-pointer">
+                        class="flex items-center space-x-1.5 px-2.5 py-1.5 md:px-4 md:py-2.5 bg-[#20241E]/85 hover:bg-[#343A2F] text-white border border-white/20 text-[9px] md:text-[10px] tracking-widest uppercase font-medium shadow-sm transition-all cursor-pointer">
                     <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-bronze"></i>
                     <span class="hidden md:inline">Reference Storyboard</span>
                 </button>
@@ -124,13 +124,13 @@
 
             <!-- Stage HUD (Bottom) -->
             <div class="absolute bottom-3 left-3 right-3 sm:right-auto md:bottom-8 md:left-12 z-20 pointer-events-none max-w-sm md:max-w-md">
-                <div class="bg-alabaster/92 backdrop-blur-md border border-sandstone/80 p-3.5 md:p-5 shadow-2xl">
+                <div class="bg-[#20241E]/80 backdrop-blur-md border border-white/25 p-3.5 md:p-5 shadow-2xl text-alabaster">
                     <div class="flex items-center justify-between gap-4 mb-1 md:mb-2">
-                        <span id="stageBadge" class="text-[9px] md:text-[10px] tracking-widest uppercase font-mono px-2 py-0.5 md:px-2.5 md:py-0.5 bg-bronze/15 text-bronze font-semibold">Stage 01 / 05</span>
-                        <span id="stageProgress" class="text-[9px] md:text-[10px] tracking-widest uppercase font-mono text-warmgray">0% Exploded</span>
+                        <span id="stageBadge" class="text-[9px] md:text-[10px] tracking-widest uppercase font-mono px-2 py-0.5 md:px-2.5 md:py-0.5 bg-white/10 text-white/90 border border-white/20 font-medium">Stage 01 / 05</span>
+                        <span id="stageProgress" class="text-[9px] md:text-[10px] tracking-widest uppercase font-mono text-white/70">0% Exploded</span>
                     </div>
-                    <h2 id="stageTitle" class="font-serif-title text-base sm:text-xl md:text-3xl font-light text-charcoal mb-0.5 md:mb-1">1. Fully Assembled Residence</h2>
-                    <p id="stageDesc" class="text-[11px] md:text-xs text-warmgray font-light leading-snug md:leading-relaxed line-clamp-2 md:line-clamp-none">Contemporary luxury villa featuring warm wood-brown architectural walls, structural timber pillars, floor-to-ceiling glass curtain walls, and dark slate roof slabs.</p>
+                    <h2 id="stageTitle" class="font-serif-title text-base sm:text-xl md:text-2xl font-light text-white mb-0.5 md:mb-1">1. Fully Assembled Residence</h2>
+                    <p id="stageDesc" class="text-[11px] md:text-xs text-white/75 font-light leading-snug md:leading-relaxed hidden sm:block">Contemporary luxury villa featuring warm honey-teak architectural cladding, structural timber pillars, floor-to-ceiling glass curtain walls, and dark slate roof slabs.</p>
                 </div>
             </div>
 
@@ -912,7 +912,7 @@
             1: {
                 badge: "Stage 01 / 05",
                 title: "1. Fully Assembled Residence",
-                desc: "Contemporary luxury villa featuring warm wood-brown architectural walls, structural timber pillars, floor-to-ceiling glass curtain walls, and dark slate roof slabs."
+                desc: "Contemporary luxury villa featuring warm honey-teak architectural cladding, structural timber pillars, floor-to-ceiling glass curtain walls, and dark slate roof slabs."
             },
             2: {
                 badge: "Stage 02 / 05",
