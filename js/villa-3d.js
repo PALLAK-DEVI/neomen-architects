@@ -148,20 +148,33 @@
             slateTex.repeat.set(3, 3);
             this.textures.slate = slateTex;
 
-            // 3. Warm Teakwood / Walnut Louver Texture
+            // 3. Architectural Warm Wood Brown Texture (1024x1024)
             const canvasWood = document.createElement('canvas');
             canvasWood.width = 1024;
             canvasWood.height = 1024;
             const ctxW = canvasWood.getContext('2d');
-            ctxW.fillStyle = '#9E6F42';
+            // Base rich warm wood brown
+            ctxW.fillStyle = '#834F29';
             ctxW.fillRect(0, 0, 1024, 1024);
 
+            // Realistic vertical architectural wood planks & timber grain
             for (let x = 0; x < 1024; x += 16) {
-                const shade = (Math.random() - 0.5) * 40;
-                ctxW.fillStyle = `rgba(${158 + shade}, ${111 + shade * 0.8}, ${66 + shade * 0.6}, 0.7)`;
+                const shade = (Math.random() - 0.5) * 32;
+                const r = Math.round(131 + shade);
+                const g = Math.round(79 + shade * 0.7);
+                const b = Math.round(41 + shade * 0.5);
+                ctxW.fillStyle = `rgb(${r}, ${g}, ${b})`;
                 ctxW.fillRect(x, 0, 14, 1024);
-                ctxW.fillStyle = 'rgba(50, 32, 16, 0.4)';
+                // Subtle dark recessed groove between planks
+                ctxW.fillStyle = 'rgba(38, 20, 9, 0.55)';
                 ctxW.fillRect(x + 14, 0, 2, 1024);
+            }
+
+            // Fine organic wood grain lines
+            for (let i = 0; i < 90; i++) {
+                const y = Math.random() * 1024;
+                ctxW.fillStyle = Math.random() > 0.5 ? 'rgba(54, 30, 13, 0.22)' : 'rgba(168, 110, 62, 0.25)';
+                ctxW.fillRect(0, y, 1024, Math.random() * 3 + 1);
             }
             const woodTex = new THREE.CanvasTexture(canvasWood);
             woodTex.wrapS = THREE.RepeatWrapping;
@@ -278,12 +291,28 @@
         }
 
         initMaterials() {
-            // Exposed architectural concrete with subtle texture
+            // Exposed architectural concrete with subtle texture (for foundations and structural elements)
             this.matConcrete = new THREE.MeshStandardMaterial({
                 color: 0xE6E2DA,
                 map: this.textures.concrete,
                 roughness: 0.72,
                 metalness: 0.05
+            });
+
+            // Rich Architectural Wood Brown for outer house walls & exterior panels
+            this.matWoodWall = new THREE.MeshStandardMaterial({
+                color: 0x86522B, // Warm rich wood brown
+                map: this.textures.wood,
+                roughness: 0.44,
+                metalness: 0.05
+            });
+
+            // Deep Architectural Wood Brown for structural outer pillars & pylons
+            this.matWoodPillar = new THREE.MeshStandardMaterial({
+                color: 0x764621, // Deep solid timber/walnut pillar brown
+                map: this.textures.wood,
+                roughness: 0.42,
+                metalness: 0.06
             });
 
             // Dark architectural concrete for retaining walls
@@ -312,9 +341,9 @@
 
             // Warm teakwood & walnut vertical grain cladding
             this.matWood = new THREE.MeshStandardMaterial({
-                color: 0x9E7044,
+                color: 0x86522B,
                 map: this.textures.wood,
-                roughness: 0.42,
+                roughness: 0.44,
                 metalness: 0.05
             });
 
@@ -585,13 +614,13 @@
             slab.receiveShadow = true;
             this.subterraneanGroup.add(slab);
 
-            // Rear & side retaining concrete walls
-            const rearWall = new THREE.Mesh(new THREE.BoxGeometry(17.2, 2.4, 0.45), this.matDarkConcrete);
+            // Rear & side retaining walls in rich wood brown
+            const rearWall = new THREE.Mesh(new THREE.BoxGeometry(17.2, 2.4, 0.45), this.matWoodWall);
             rearWall.position.set(0, -0.85, -7.2);
             rearWall.castShadow = true;
             this.subterraneanGroup.add(rearWall);
 
-            const sideWall = new THREE.Mesh(new THREE.BoxGeometry(0.45, 2.4, 14.0), this.matDarkConcrete);
+            const sideWall = new THREE.Mesh(new THREE.BoxGeometry(0.45, 2.4, 14.0), this.matWoodWall);
             sideWall.position.set(-8.4, -0.85, -0.5);
             sideWall.castShadow = true;
             this.subterraneanGroup.add(sideWall);
@@ -601,9 +630,9 @@
             garageGlass.position.set(-1.0, -0.9, 5.2);
             this.subterraneanGroup.add(garageGlass);
 
-            // Structural concrete pillars
+            // Structural pillars in deep wood brown timber
             for (let x of [-4.2, 3.8]) {
-                const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.65, 2.4, 0.65), this.matConcrete);
+                const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.65, 2.4, 0.65), this.matWoodPillar);
                 pillar.position.set(x, -0.85, 5.2);
                 pillar.castShadow = true;
                 this.subterraneanGroup.add(pillar);
@@ -647,14 +676,14 @@
             extSlab.receiveShadow = true;
             this.groundGroup.add(extSlab);
 
-            // Rear architectural concrete wall with teakwood accents
-            const backWall = new THREE.Mesh(new THREE.BoxGeometry(17.4, 2.9, 0.4), this.matConcrete);
+            // Rear architectural wall in rich wood brown with wood panel accents
+            const backWall = new THREE.Mesh(new THREE.BoxGeometry(17.4, 2.9, 0.4), this.matWoodWall);
             backWall.position.set(0, 1.75, -7.0);
             backWall.castShadow = true;
             this.groundGroup.add(backWall);
 
-            // Teakwood vertical slat accent wall
-            const woodPanel = new THREE.Mesh(new THREE.BoxGeometry(7.2, 2.7, 0.12), this.matWood);
+            // Teakwood vertical slat accent wall in matching wood brown
+            const woodPanel = new THREE.Mesh(new THREE.BoxGeometry(7.2, 2.7, 0.12), this.matWoodWall);
             woodPanel.position.set(-3.6, 1.75, -6.75);
             this.groundGroup.add(woodPanel);
 
@@ -752,8 +781,8 @@
         }
 
         buildLeftWing() {
-            // Protruding cantilevered concrete box (upper left study / guest volume)
-            const boxFrame = new THREE.Mesh(new THREE.BoxGeometry(5.8, 3.4, 6.6), this.matConcrete);
+            // Protruding cantilevered volume in rich wood brown (upper left study / guest volume)
+            const boxFrame = new THREE.Mesh(new THREE.BoxGeometry(5.8, 3.4, 6.6), this.matWoodWall);
             boxFrame.position.set(-8.0, 4.5, 2.5);
             boxFrame.castShadow = true;
             this.leftWingGroup.add(boxFrame);
@@ -774,15 +803,15 @@
         }
 
         buildRightWing() {
-            // Cantilevered upper right volume with warm vertical wood siding
-            const woodBox = new THREE.Mesh(new THREE.BoxGeometry(5.6, 3.2, 6.2), this.matWood);
+            // Cantilevered upper right volume with rich architectural wood brown
+            const woodBox = new THREE.Mesh(new THREE.BoxGeometry(5.6, 3.2, 6.2), this.matWoodWall);
             woodBox.position.set(7.8, 4.4, 2.0);
             woodBox.castShadow = true;
             this.rightWingGroup.add(woodBox);
 
-            // Three vertical board-formed concrete pylons with horizontal teakwood privacy louvers (as in reference image)
+            // Three vertical architectural timber pillars / pylons in deep wood brown
             for (let i = 0; i < 3; i++) {
-                const pylon = new THREE.Mesh(new THREE.BoxGeometry(1.2, 8.8, 1.2), this.matConcrete);
+                const pylon = new THREE.Mesh(new THREE.BoxGeometry(1.2, 8.8, 1.2), this.matWoodPillar);
                 pylon.position.set(9.8 + i * 2.2, 2.6, 4.5 - i * 3.5);
                 pylon.castShadow = true;
                 this.rightWingGroup.add(pylon);
@@ -795,11 +824,11 @@
         }
 
         buildFloatingPanels() {
-            // 6 Vertical architectural panels
+            // 6 Vertical exterior architectural panels in warm wood brown
             for (let i = 0; i < 3; i++) {
                 const panel = new THREE.Mesh(
                     new THREE.BoxGeometry(0.25, 4.8, 1.8),
-                    i % 2 === 0 ? this.matConcrete : this.matWood
+                    this.matWoodWall
                 );
                 panel.position.set(-12.4 - i * 1.0, 3.4 + (i % 2) * 0.5, 4.2 - i * 3.4);
                 panel.castShadow = true;
@@ -809,7 +838,7 @@
             for (let i = 0; i < 3; i++) {
                 const panel = new THREE.Mesh(
                     new THREE.BoxGeometry(0.25, 4.8, 1.8),
-                    i % 2 === 0 ? this.matConcrete : this.matWood
+                    this.matWoodWall
                 );
                 panel.position.set(12.4 + i * 1.0, 3.4 + (i % 2) * 0.5, 4.2 - i * 3.4);
                 panel.castShadow = true;
@@ -868,7 +897,7 @@
                 [-3.5, 6.45, -2.5], [-3.5, 6.45, 2.5], [6.5, 6.45, -2.5], [6.5, 6.45, 2.5]
             ];
             for (let pos of planterPositions) {
-                const planter = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.45, 1.4), this.matConcrete);
+                const planter = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.45, 1.4), this.matWoodWall);
                 planter.position.set(pos[0], pos[1] + 0.22, pos[2]);
                 planter.castShadow = true;
                 this.roofGroup.add(planter);
