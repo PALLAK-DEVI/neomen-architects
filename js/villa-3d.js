@@ -182,19 +182,34 @@
             woodTex.repeat.set(3, 1);
             this.textures.wood = woodTex;
 
-            // 4. Travertine Stone Podium & Slabs
+            // 4. Refined Off-White Stone Flooring Texture (1024x1024)
             const canvasTrav = document.createElement('canvas');
             canvasTrav.width = 1024;
             canvasTrav.height = 1024;
             const ctxT = canvasTrav.getContext('2d');
-            ctxT.fillStyle = '#E5E0D5';
+            ctxT.fillStyle = '#FAF8F5'; // Luminous architectural off-white
             ctxT.fillRect(0, 0, 1024, 1024);
 
-            for (let i = 0; i < 60; i++) {
+            for (let i = 0; i < 45; i++) {
                 const y = Math.random() * 1024;
-                const h = Math.random() * 22 + 6;
-                ctxT.fillStyle = Math.random() > 0.5 ? 'rgba(215, 205, 190, 0.45)' : 'rgba(248, 244, 236, 0.55)';
+                const h = Math.random() * 20 + 4;
+                ctxT.fillStyle = Math.random() > 0.5 ? 'rgba(238, 234, 226, 0.35)' : 'rgba(255, 255, 255, 0.6)';
                 ctxT.fillRect(0, y, 1024, h);
+            }
+            // Fine architectural off-white stone joints
+            ctxT.strokeStyle = 'rgba(220, 214, 204, 0.3)';
+            ctxT.lineWidth = 1;
+            for (let x = 0; x < 1024; x += 128) {
+                ctxT.beginPath();
+                ctxT.moveTo(x, 0);
+                ctxT.lineTo(x, 1024);
+                ctxT.stroke();
+            }
+            for (let y = 0; y < 1024; y += 128) {
+                ctxT.beginPath();
+                ctxT.moveTo(0, y);
+                ctxT.lineTo(1024, y);
+                ctxT.stroke();
             }
             const travTex = new THREE.CanvasTexture(canvasTrav);
             travTex.wrapS = THREE.RepeatWrapping;
@@ -331,12 +346,20 @@
                 metalness: 0.15
             });
 
-            // Natural cream travertine stone flooring
-            this.matTravertine = new THREE.MeshStandardMaterial({
-                color: 0xE7E2D7,
+            // Refined Architectural Off-White Stone Flooring
+            this.matFloorOffWhite = new THREE.MeshStandardMaterial({
+                color: 0xFAF8F5, // Luminous, pristine off-white
                 map: this.textures.travertine,
-                roughness: 0.52,
-                metalness: 0.04
+                roughness: 0.32,
+                metalness: 0.03
+            });
+
+            // Natural off-white travertine stone flooring & podium
+            this.matTravertine = new THREE.MeshStandardMaterial({
+                color: 0xFAF8F5,
+                map: this.textures.travertine,
+                roughness: 0.36,
+                metalness: 0.03
             });
 
             // Warm teakwood & walnut vertical grain cladding
@@ -608,8 +631,8 @@
         }
 
         buildSubterranean() {
-            // Basement concrete foundation
-            const slab = new THREE.Mesh(new THREE.BoxGeometry(17.2, 0.45, 14.0), this.matDarkConcrete);
+            // Basement off-white floor slab
+            const slab = new THREE.Mesh(new THREE.BoxGeometry(17.2, 0.45, 14.0), this.matFloorOffWhite);
             slab.position.set(0, -2.0, -0.5);
             slab.receiveShadow = true;
             this.subterraneanGroup.add(slab);
@@ -662,15 +685,15 @@
         }
 
         buildGroundLevel() {
-            // Ground floor slab in refined cream travertine
-            const floorSlab = new THREE.Mesh(new THREE.BoxGeometry(18.0, 0.44, 15.0), this.matTravertine);
+            // Ground floor slab in refined off-white stone
+            const floorSlab = new THREE.Mesh(new THREE.BoxGeometry(18.0, 0.44, 15.0), this.matFloorOffWhite);
             floorSlab.position.set(0, 0.22, 0);
             floorSlab.receiveShadow = true;
             floorSlab.castShadow = true;
             this.groundGroup.add(floorSlab);
 
-            // Cantilevered intermediate concrete slab projecting out towards the right
-            const extSlab = new THREE.Mesh(new THREE.BoxGeometry(6.5, 0.35, 8.0), this.matConcrete);
+            // Cantilevered intermediate off-white floor slab projecting out towards the right
+            const extSlab = new THREE.Mesh(new THREE.BoxGeometry(6.5, 0.35, 8.0), this.matFloorOffWhite);
             extSlab.position.set(9.0, 0.22, 1.0);
             extSlab.castShadow = true;
             extSlab.receiveShadow = true;
@@ -847,8 +870,8 @@
         }
 
         buildUpperLevel() {
-            // Upper floor slab
-            const floorSlab = new THREE.Mesh(new THREE.BoxGeometry(17.4, 0.4, 14.5), this.matConcrete);
+            // Upper floor slab in refined off-white stone
+            const floorSlab = new THREE.Mesh(new THREE.BoxGeometry(17.4, 0.4, 14.5), this.matFloorOffWhite);
             floorSlab.position.set(0, 3.15, 0);
             floorSlab.receiveShadow = true;
             floorSlab.castShadow = true;
