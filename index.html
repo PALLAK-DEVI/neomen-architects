@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEOMEN ARCHITECTS — Luxury Architecture & Bespoke Interiors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        alabaster: '#FBF9F5',
+                        travertine: '#F3EFE6',
+                        sandstone: '#E5DEC9',
+                        charcoal: '#1A1918',
+                        warmgray: '#8C857B',
+                        bronze: '#9E7B56',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FBF9F5;
+            color: #1A1918;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .font-serif-title {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .hero-slide {
+            transition: opacity 1s ease-in-out;
+        }
+        .glass-panel {
+            background: rgba(251, 249, 245, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .glass-dark {
+            background: rgba(26, 25, 24, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        /* Hide scrollbars for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-bronze selection:text-white">
+
+    <!-- NAVIGATION BAR -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-6 px-6 md:px-12 flex justify-between items-center text-charcoal">
+        <a href="#" class="flex items-center gap-2 group">
+            <span class="font-serif-title text-2xl md:text-3xl tracking-widest font-light uppercase border-b border-transparent group-hover:border-bronze transition-all">NEOMEN</span>
+            <span class="text-[10px] tracking-widest uppercase font-sans text-bronze font-semibold">STUDIO</span>
+        </a>
+
+        <nav class="hidden lg:flex items-center space-x-10 text-xs tracking-widest uppercase font-medium">
+            <a href="#about" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">About</a>
+            <a href="#projects" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">Portfolio</a>
+            <a href="#services" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">Services</a>
+            <a href="#materials" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">Material Atelier</a>
+            <a href="#calculator" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">Estimator</a>
+            <a href="#journal" class="hover:text-bronze transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-bronze hover:after:w-full after:transition-all">Journal</a>
+        </nav>
+
+        <div class="hidden lg:flex items-center gap-6">
+            <a href="#contact" class="px-6 py-2.5 bg-charcoal text-alabaster text-xs tracking-widest uppercase hover:bg-bronze transition-all duration-300 rounded-none shadow-sm">
+                Book Consultation
+            </a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="menuBtn" class="lg:hidden text-charcoal focus:outline-none" aria-label="Toggle Navigation">
+            <i data-lucide="menu" class="w-7 h-7"></i>
+        </button>
+    </header>
+
+    <!-- MOBILE NAVIGATION OVERLAY -->
+    <div id="mobileMenu" class="fixed inset-0 bg-charcoal text-alabaster z-50 transform translate-x-full transition-transform duration-500 flex flex-col justify-between p-8 lg:hidden">
+        <div class="flex justify-between items-center">
+            <span class="font-serif-title text-2xl tracking-widest font-light uppercase">NEOMEN</span>
+            <button id="closeMenuBtn" class="text-alabaster focus:outline-none" aria-label="Close Navigation">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-6 text-xl font-serif-title tracking-wider">
+            <a href="#about" class="mobile-link hover:text-bronze transition-colors">01. Studio & Philosophy</a>
+            <a href="#projects" class="mobile-link hover:text-bronze transition-colors">02. Selected Portfolio</a>
+            <a href="#services" class="mobile-link hover:text-bronze transition-colors">03. Expertise & Practice</a>
+            <a href="#materials" class="mobile-link hover:text-bronze transition-colors">04. Material Atelier</a>
+            <a href="#calculator" class="mobile-link hover:text-bronze transition-colors">05. Budget Estimator</a>
+            <a href="#journal" class="mobile-link hover:text-bronze transition-colors">06. Editorial Journal</a>
+            <a href="#contact" class="mobile-link hover:text-bronze transition-colors">07. Connect</a>
+        </nav>
+        <div class="text-xs text-warmgray tracking-widest uppercase border-t border-warmgray/20 pt-6">
+            <p>New Delhi • Mumbai • Bengaluru • Dubai</p>
+            <p class="mt-2">© NEOMEN Architects. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- HERO SECTION SLIDER -->
+    <section class="relative h-screen w-full overflow-hidden bg-charcoal">
+        <div id="heroSlider" class="relative h-full w-full">
+            <!-- Slide 1 -->
+            <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-1000 ease-in-out">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop" 
+                     alt="Luxury Contemporary Residence Exterior" 
+                     class="w-full h-full object-cover object-center filter brightness-[0.85]" loading="eager">
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent"></div>
+                <div class="absolute bottom-16 md:bottom-24 left-6 md:left-16 max-w-3xl text-alabaster z-10">
+                    <p class="text-xs md:text-sm tracking-widest uppercase text-bronze font-semibold mb-3">Residential Architecture • New Delhi</p>
+                    <h1 class="font-serif-title text-4xl md:text-7xl font-light leading-tight mb-4">The Alabaster Pavilion</h1>
+                    <p class="text-sm md:text-base text-warmgray max-w-xl font-light">Harmonizing raw board-formed concrete, warm teakwood louvers, and seamless indoor-outdoor water courts.</p>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop" 
+                     alt="Minimalist Luxury Living Room Interior" 
+                     class="w-full h-full object-cover object-center filter brightness-[0.85]" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent"></div>
+                <div class="absolute bottom-16 md:bottom-24 left-6 md:left-16 max-w-3xl text-alabaster z-10">
+                    <p class="text-xs md:text-sm tracking-widest uppercase text-bronze font-semibold mb-3">Boutique Interior • Mumbai Coast</p>
+                    <h1 class="font-serif-title text-4xl md:text-7xl font-light leading-tight mb-4">Penthouse Solitude</h1>
+                    <p class="text-sm md:text-base text-warmgray max-w-xl font-light">Custom Travertine stonework paired with brass accent details and panoramic Arabian Sea views.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="hero-slide absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out">
+                <img src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=2000&auto=format&fit=crop" 
+                     alt="Commercial Architectural Design Studio" 
+                     class="w-full h-full object-cover object-center filter brightness-[0.85]" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent"></div>
+                <div class="absolute bottom-16 md:bottom-24 left-6 md:left-16 max-w-3xl text-alabaster z-10">
+                    <p class="text-xs md:text-sm tracking-widest uppercase text-bronze font-semibold mb-3">Commercial & Cultural • Bengaluru</p>
+                    <h1 class="font-serif-title text-4xl md:text-7xl font-light leading-tight mb-4">Aether Innovation Hub</h1>
+                    <p class="text-sm md:text-base text-warmgray max-w-xl font-light">A net-zero sustainable workspace utilizing micro-climate courtyards and passive geothermal cooling.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slider Controls -->
+        <div class="absolute bottom-10 right-6 md:right-16 z-20 flex items-center space-x-6">
+            <div class="flex space-x-3" id="sliderDots">
+                <button class="w-12 h-[2px] bg-alabaster transition-all cursor-pointer" onclick="goToSlide(0)"></button>
+                <button class="w-12 h-[2px] bg-warmgray/40 transition-all cursor-pointer" onclick="goToSlide(1)"></button>
+                <button class="w-12 h-[2px] bg-warmgray/40 transition-all cursor-pointer" onclick="goToSlide(2)"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- KEY STATS STRIP -->
+    <section class="bg-travertine border-y border-sandstone/60 py-12 px-6 md:px-16">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
+            <div>
+                <p class="font-serif-title text-3xl md:text-5xl font-light text-charcoal">180+</p>
+                <p class="text-xs tracking-widest uppercase text-warmgray mt-2">Projects Completed</p>
+            </div>
+            <div>
+                <p class="font-serif-title text-3xl md:text-5xl font-light text-charcoal">14</p>
+                <p class="text-xs tracking-widest uppercase text-warmgray mt-2">Design Awards</p>
+            </div>
+            <div>
+                <p class="font-serif-title text-3xl md:text-5xl font-light text-charcoal">12 Yrs</p>
+                <p class="text-xs tracking-widest uppercase text-warmgray mt-2">Architectural Excellence</p>
+            </div>
+            <div>
+                <p class="font-serif-title text-3xl md:text-5xl font-light text-charcoal">4</p>
+                <p class="text-xs tracking-widest uppercase text-warmgray mt-2">Global Studios</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT / PHILOSOPHY SECTION -->
+    <section id="about" class="py-24 md:py-36 px-6 md:px-16 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <div class="lg:col-span-5 relative">
+                <div class="relative z-10 overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop" 
+                         alt="Architectural Material & Blueprint Craft" 
+                         class="w-full h-[520px] object-cover filter contrast-[1.05]" loading="lazy">
+                </div>
+                <div class="absolute -bottom-8 -right-8 w-64 h-64 bg-sandstone/40 -z-0 hidden sm:block"></div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                <div class="flex items-center space-x-3 text-bronze text-xs tracking-widest uppercase font-semibold">
+                    <span class="w-8 h-[1px] bg-bronze"></span>
+                    <span>Our Philosophy</span>
+                </div>
+                <h2 class="font-serif-title text-3xl md:text-5xl font-light leading-tight text-charcoal">
+                    Architectural clarity born from tactile authenticity and spatial stillness.
+                </h2>
+                <p class="text-sm md:text-base text-warmgray font-light leading-relaxed">
+                    NEOMEN Studio was founded on the belief that spatial luxury does not stem from ornamentation, but from the disciplined interplay of light, volume, and material integrity. Inspired by contemporary minimalism and tropical modernism, our practice approaches every villa, residence, and cultural space as a permanent dialogue between site and soul.
+                </p>
+                <p class="text-sm md:text-base text-warmgray font-light leading-relaxed">
+                    We manage the entire spectrum of creation — from contextual site analysis and structural engineering to bespoke furniture design and hand-selected raw stone curation.
+                </p>
+                
+                <div class="pt-6 grid grid-cols-2 gap-6 border-t border-sandstone/80 text-xs tracking-widest uppercase">
+                    <div>
+                        <span class="text-bronze block mb-1">Principal Architect</span>
+                        <span class="text-charcoal font-medium">Kabir Neomen, AIA</span>
+                    </div>
+                    <div>
+                        <span class="text-bronze block mb-1">Interior Practice Lead</span>
+                        <span class="text-charcoal font-medium">Elena Rostova</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO / FEATURED PROJECTS SECTION -->
+    <section id="projects" class="py-24 bg-travertine/60 px-6 md:px-16">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-bronze text-xs tracking-widest uppercase font-semibold block mb-2">Curated Works</span>
+                    <h2 class="font-serif-title text-3xl md:text-5xl font-light text-charcoal">Selected Architecture & Interiors</h2>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-2 md:gap-4 mt-6 md:mt-0 text-xs tracking-widest uppercase">
+                    <button class="filter-btn active-filter px-4 py-2 border border-charcoal bg-charcoal text-alabaster transition-all" data-category="all">All</button>
+                    <button class="filter-btn px-4 py-2 border border-sandstone hover:border-charcoal text-charcoal transition-all" data-category="residential">Residential</button>
+                    <button class="filter-btn px-4 py-2 border border-sandstone hover:border-charcoal text-charcoal transition-all" data-category="interiors">Interiors</button>
+                    <button class="filter-btn px-4 py-2 border border-sandstone hover:border-charcoal text-charcoal transition-all" data-category="commercial">Commercial</button>
+                </div>
+            </div>
+
+            <!-- Project Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projectsGrid">
+                
+                <!-- Project 1 -->
+                <div class="project-card group cursor-pointer" data-category="residential" onclick="openModal('villa-aurora')">
+                    <div class="relative overflow-hidden aspect-[4/5] bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Villa Aurora Luxury Architecture" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-charcoal/20 group-hover:bg-charcoal/0 transition-all duration-500"></div>
+                        <div class="absolute top-4 right-4 bg-alabaster/90 backdrop-blur-md text-[10px] uppercase tracking-widest px-3 py-1 text-charcoal">Residential</div>
+                    </div>
+                    <div class="mt-4 flex justify-between items-baseline">
+                        <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors">Villa Aurora</h3>
+                        <span class="text-xs text-warmgray">Goa • 2025</span>
+                    </div>
+                    <p class="text-xs text-warmgray mt-1 font-light">Cliffside cantilevered concrete & natural granite residence.</p>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card group cursor-pointer" data-category="interiors" onclick="openModal('stone-sanctuary')">
+                    <div class="relative overflow-hidden aspect-[4/5] bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Stone Sanctuary Living Room" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-charcoal/20 group-hover:bg-charcoal/0 transition-all duration-500"></div>
+                        <div class="absolute top-4 right-4 bg-alabaster/90 backdrop-blur-md text-[10px] uppercase tracking-widest px-3 py-1 text-charcoal">Interiors</div>
+                    </div>
+                    <div class="mt-4 flex justify-between items-baseline">
+                        <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors">The Travertine Loft</h3>
+                        <span class="text-xs text-warmgray">Mumbai • 2024</span>
+                    </div>
+                    <p class="text-xs text-warmgray mt-1 font-light">High-ceiling penthouse with fluted marble feature walls.</p>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card group cursor-pointer" data-category="commercial" onclick="openModal('monolith-hq')">
+                    <div class="relative overflow-hidden aspect-[4/5] bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Monolith Studio Headquarters" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-charcoal/20 group-hover:bg-charcoal/0 transition-all duration-500"></div>
+                        <div class="absolute top-4 right-4 bg-alabaster/90 backdrop-blur-md text-[10px] uppercase tracking-widest px-3 py-1 text-charcoal">Commercial</div>
+                    </div>
+                    <div class="mt-4 flex justify-between items-baseline">
+                        <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors">Monolith HQ</h3>
+                        <span class="text-xs text-warmgray">Bengaluru • 2024</span>
+                    </div>
+                    <p class="text-xs text-warmgray mt-1 font-light">Biophilic tech corporate campus with subterranean gardens.</p>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card group cursor-pointer" data-category="residential" onclick="openModal('teak-pavilion')">
+                    <div class="relative overflow-hidden aspect-[4/5] bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Teakwood Modern House" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-charcoal/20 group-hover:bg-charcoal/0 transition-all duration-500"></div>
+                        <div class="absolute top-4 right-4 bg-alabaster/90 backdrop-blur-md text-[10px] uppercase tracking-widest px-3 py-1 text-charcoal">Residential</div>
+                    </div>
+                    <div class="mt-4 flex justify-between items-baseline">
+                        <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors">House of Courtyards</h3>
+                        <span class="text-xs text-warmgray">New Delhi • 2025</span>
+                    </div>
+                    <p class="text-xs text-warmgray mt-1 font-light">Multigenerational sprawling estate with traditional craft details.</p>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card group cursor-pointer" data-category="interiors" onclick="openModal('obsidian-kitchen')">
+                    <div class="relative overflow-hidden aspect-[4/5] bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Minimalist Kitchen Design" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-charcoal/20 group-hover:bg-charcoal/0 transition-all duration-500"></div>
+                        <div class="absolute top-4 right-4 bg-alabaster/90 backdrop-blur-md text-[10px] uppercase tracking-widest px-3 py-1 text-charcoal">Interiors</div>
+                    </div>
+                    <div class="mt-4 flex justify-between items-baseline">
+                        <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors">Obsidian Culinary Suite</h3>
+                        <span class="text-xs text-warmgray">Dubai • 2024</span>
+                    </div>
+                    <p class="text-xs text-warmgray mt-1 font-light">Custom monolithic quartz island with integrated brass fixtures.</p>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card group cursor-pointer" data-category="commercial" onclick="openModal('zenith-spa')">
+                    <div class="relative overflow-hidden aspect-[4/5] bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Luxury Wellness Spa & Resort Interior" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-charcoal/20 group-hover:bg-charcoal/0 transition-all duration-500"></div>
+                        <div class="absolute top-4 right-4 bg-alabaster/90 backdrop-blur-md text-[10px] uppercase tracking-widest px-3 py-1 text-charcoal">Commercial</div>
+                    </div>
+                    <div class="mt-4 flex justify-between items-baseline">
+                        <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors">Aman Wellness Sanctuary</h3>
+                        <span class="text-xs text-warmgray">Udaipur • 2023</span>
+                    </div>
+                    <p class="text-xs text-warmgray mt-1 font-light">Subterranean hydrothermal wellness retreat crafted in black slate.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-24 md:py-36 px-6 md:px-16 max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <span class="text-bronze text-xs tracking-widest uppercase font-semibold block mb-2">Our Capabilities</span>
+            <h2 class="font-serif-title text-3xl md:text-5xl font-light text-charcoal">Comprehensive Design Practice</h2>
+            <p class="text-sm text-warmgray font-light mt-4">We deliver end-to-end spatial perfection through rigorous architectural design, interior artistry, and meticulous execution.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Service 1 -->
+            <div class="p-8 bg-travertine/40 border border-sandstone/60 hover:border-bronze transition-all duration-300">
+                <div class="w-12 h-12 flex items-center justify-center bg-charcoal text-alabaster mb-6">
+                    <i data-lucide="compass" class="w-6 h-6 text-bronze"></i>
+                </div>
+                <h3 class="font-serif-title text-2xl font-light text-charcoal mb-3">01. Master Architectural Design</h3>
+                <p class="text-xs text-warmgray leading-relaxed font-light mb-6">
+                    From ground-up estate master planning to structural engineering, facade engineering, and sun-path optimized residential spatial layouts.
+                </p>
+                <ul class="text-xs text-charcoal space-y-2 border-t border-sandstone/60 pt-4 font-light">
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Bespoke Villa Masterplanning</li>
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Sustainable & Passive Solar Design</li>
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Statutory Approvals & Execution</li>
+                </ul>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="p-8 bg-travertine/40 border border-sandstone/60 hover:border-bronze transition-all duration-300">
+                <div class="w-12 h-12 flex items-center justify-center bg-charcoal text-alabaster mb-6">
+                    <i data-lucide="layers" class="w-6 h-6 text-bronze"></i>
+                </div>
+                <h3 class="font-serif-title text-2xl font-light text-charcoal mb-3">02. Bespoke Interior Architecture</h3>
+                <p class="text-xs text-warmgray leading-relaxed font-light mb-6">
+                    Curating high-touch living environments with custom millwork, imported stone sourcing, lighting design, and atmospheric spatial sequencing.
+                </p>
+                <ul class="text-xs text-charcoal space-y-2 border-t border-sandstone/60 pt-4 font-light">
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Custom Furniture & joinery Design</li>
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Material Curation & Procurement</li>
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Architectural Lighting Landscapes</li>
+                </ul>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="p-8 bg-travertine/40 border border-sandstone/60 hover:border-bronze transition-all duration-300">
+                <div class="w-12 h-12 flex items-center justify-center bg-charcoal text-alabaster mb-6">
+                    <i data-lucide="hammer" class="w-6 h-6 text-bronze"></i>
+                </div>
+                <h3 class="font-serif-title text-2xl font-light text-charcoal mb-3">03. Turnkey Design-Build</h3>
+                <p class="text-xs text-warmgray leading-relaxed font-light mb-6">
+                    Single-point accountability from concept creation to final furniture placement, assuring uncompromising craftsmanship standards.
+                </p>
+                <ul class="text-xs text-charcoal space-y-2 border-t border-sandstone/60 pt-4 font-light">
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> On-site Project Management</li>
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Material Quality Assurance</li>
+                    <li class="flex items-center gap-2"><span class="text-bronze">•</span> Timeline & Cost Guarantee</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE MATERIAL ATELIER -->
+    <section id="materials" class="py-24 bg-charcoal text-alabaster px-6 md:px-16">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-bronze text-xs tracking-widest uppercase font-semibold">Tactile Integrity</span>
+                    <h2 class="font-serif-title text-3xl md:text-5xl font-light leading-tight">Interactive Material Atelier</h2>
+                    <p class="text-xs md:text-sm text-warmgray font-light leading-relaxed">
+                        We prioritize authentic materials that age gracefully over time. Select finishes below to preview our signature architectural material pairings.
+                    </p>
+
+                    <!-- Material Options selector buttons -->
+                    <div class="space-y-3 pt-4">
+                        <button onclick="selectMaterial('travertine')" class="mat-btn w-full text-left p-4 border border-warmgray/30 hover:border-bronze flex items-center justify-between transition-all bg-warmgray/10" id="mat-btn-travertine">
+                            <div>
+                                <span class="block text-sm font-medium">Italian Roman Travertine</span>
+                                <span class="text-xs text-warmgray">Porous, tactile, warm honey tones</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-bronze"></i>
+                        </button>
+
+                        <button onclick="selectMaterial('brass')" class="mat-btn w-full text-left p-4 border border-warmgray/30 hover:border-bronze flex items-center justify-between transition-all" id="mat-btn-brass">
+                            <div>
+                                <span class="block text-sm font-medium">Patinated Aged Brass</span>
+                                <span class="text-xs text-warmgray">Hand-rubbed metallic accents</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-warmgray"></i>
+                        </button>
+
+                        <button onclick="selectMaterial('oak')" class="mat-btn w-full text-left p-4 border border-warmgray/30 hover:border-bronze flex items-center justify-between transition-all" id="mat-btn-oak">
+                            <div>
+                                <span class="block text-sm font-medium">Smoked European White Oak</span>
+                                <span class="text-xs text-warmgray">Deep textured timber joinery</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-warmgray"></i>
+                        </button>
+
+                        <button onclick="selectMaterial('concrete')" class="mat-btn w-full text-left p-4 border border-warmgray/30 hover:border-bronze flex items-center justify-between transition-all" id="mat-btn-concrete">
+                            <div>
+                                <span class="block text-sm font-medium">Board-Formed Architectural Concrete</span>
+                                <span class="text-xs text-warmgray">Monolithic structural aesthetic</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-warmgray"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Material Preview Window -->
+                <div class="lg:col-span-7 relative">
+                    <div class="relative h-[480px] w-full overflow-hidden border border-warmgray/30 shadow-2xl">
+                        <img id="materialPreviewImg" 
+                             src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1200&auto=format&fit=crop" 
+                             alt="Material Texture Preview" 
+                             class="w-full h-full object-cover transition-opacity duration-700">
+                        <div class="absolute bottom-0 left-0 right-0 p-6 glass-dark text-alabaster">
+                            <span class="text-[10px] tracking-widest uppercase text-bronze font-semibold block mb-1">Material Spec</span>
+                            <h4 id="materialTitle" class="font-serif-title text-2xl font-light">Italian Roman Travertine</h4>
+                            <p id="materialDesc" class="text-xs text-warmgray font-light mt-1">Sourced directly from quarries in Tivoli, Italy. Unfilled or custom honed for master bathroom vanities and luxury exterior cladding.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE BUDGET ESTIMATOR SECTION -->
+    <section id="calculator" class="py-24 px-6 md:px-16 max-w-5xl mx-auto">
+        <div class="bg-travertine p-8 md:p-14 border border-sandstone shadow-sm">
+            <div class="text-center max-w-xl mx-auto mb-10">
+                <span class="text-bronze text-xs tracking-widest uppercase font-semibold block mb-2">Transparency</span>
+                <h2 class="font-serif-title text-3xl md:text-4xl font-light text-charcoal">Project Investment Estimator</h2>
+                <p class="text-xs text-warmgray font-light mt-2">Get an immediate indicative estimate for your upcoming architectural or interior project.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-charcoal font-semibold mb-2">Scope of Project</label>
+                        <select id="estType" onchange="calculateEstimate()" class="w-full bg-alabaster border border-sandstone p-3 text-xs text-charcoal focus:outline-none focus:border-bronze">
+                            <option value="architecture">Full Architectural Design & Planning</option>
+                            <option value="interior">Luxury Interior Architecture</option>
+                            <option value="turnkey">Complete Turnkey Design & Build</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs uppercase tracking-widest text-charcoal font-semibold mb-2">
+                            <span>Built-Up Area (Sq. Ft.)</span>
+                            <span id="areaVal" class="text-bronze">4,500 Sq. Ft.</span>
+                        </div>
+                        <input type="range" id="estArea" min="1000" max="25000" step="500" value="4500" oninput="calculateEstimate()" class="w-full accent-bronze cursor-pointer">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-charcoal font-semibold mb-2">Finish & Material Specification Tier</label>
+                        <select id="estTier" onchange="calculateEstimate()" class="w-full bg-alabaster border border-sandstone p-3 text-xs text-charcoal focus:outline-none focus:border-bronze">
+                            <option value="1">Signature Modern (Premium Italian Stone & Hardwood)</option>
+                            <option value="1.35">Ultra Bespoke (Imported Custom Finishes & Automation)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Result Display -->
+                <div class="bg-charcoal text-alabaster p-8 flex flex-col justify-between h-full border-t-2 md:border-t-0 md:border-l-2 border-bronze">
+                    <div>
+                        <span class="text-[10px] tracking-widest uppercase text-bronze font-semibold block mb-2">Indicative Investment Range</span>
+                        <div id="estResult" class="font-serif-title text-3xl md:text-4xl font-light text-alabaster">
+                            ₹1.35 Cr – ₹1.65 Cr
+                        </div>
+                        <p class="text-[11px] text-warmgray mt-4 leading-relaxed font-light">
+                            *This indicative estimate includes complete design consultancy, material curation, structural planning, and site supervision fees.
+                        </p>
+                    </div>
+                    
+                    <a href="#contact" class="mt-8 text-center py-3 bg-bronze text-alabaster text-xs tracking-widest uppercase hover:bg-alabaster hover:text-charcoal transition-all">
+                        Request Detailed Proposal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDITORIAL JOURNAL & NEWS -->
+    <section id="journal" class="py-24 bg-travertine/40 px-6 md:px-16 border-t border-sandstone/60">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <span class="text-bronze text-xs tracking-widest uppercase font-semibold block mb-2">Perspectives</span>
+                    <h2 class="font-serif-title text-3xl md:text-5xl font-light text-charcoal">Architectural Journal</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <article class="group cursor-pointer">
+                    <div class="overflow-hidden aspect-[16/10] mb-4 bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800&auto=format&fit=crop" 
+                             alt="Light and Shadow in Architecture" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    </div>
+                    <span class="text-[10px] uppercase tracking-widest text-bronze font-semibold">Design Theory • March 2026</span>
+                    <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors mt-2">Sculpting Space through Natural Daylight</h3>
+                    <p class="text-xs text-warmgray mt-2 font-light leading-relaxed">How strategic orientation and skylight placement transform heavy concrete structures into weightless sanctuaries.</p>
+                </article>
+
+                <article class="group cursor-pointer">
+                    <div class="overflow-hidden aspect-[16/10] mb-4 bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&auto=format&fit=crop" 
+                             alt="Sustainable Luxury Villa Design" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    </div>
+                    <span class="text-[10px] uppercase tracking-widest text-bronze font-semibold">Sustainability • February 2026</span>
+                    <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors mt-2">Thermal Mass & Tropical Modernism</h3>
+                    <p class="text-xs text-warmgray mt-2 font-light leading-relaxed">Integrating centuries-old vernacular climate solutions with contemporary glass and cantilever engineering.</p>
+                </article>
+
+                <article class="group cursor-pointer">
+                    <div class="overflow-hidden aspect-[16/10] mb-4 bg-charcoal">
+                        <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?q=80&w=800&auto=format&fit=crop" 
+                             alt="Interior Stone & Wood Finishes" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    </div>
+                    <span class="text-[10px] uppercase tracking-widest text-bronze font-semibold">Craftsmanship • January 2026</span>
+                    <h3 class="font-serif-title text-2xl font-light text-charcoal group-hover:text-bronze transition-colors mt-2">The Quiet Luxury of Hand-Fluted Stone</h3>
+                    <p class="text-xs text-warmgray mt-2 font-light leading-relaxed">Why tactile wall surfaces are replacing smooth paint in high-end luxury interiors globally.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONSULTATION & CONTACT PORTAL -->
+    <section id="contact" class="py-24 bg-charcoal text-alabaster px-6 md:px-16">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
+            
+            <div class="lg:col-span-5 space-y-8">
+                <div>
+                    <span class="text-bronze text-xs tracking-widest uppercase font-semibold block mb-2">Initiate Dialogue</span>
+                    <h2 class="font-serif-title text-4xl md:text-6xl font-light leading-tight">Start Your Architectural Project</h2>
+                    <p class="text-xs md:text-sm text-warmgray font-light mt-4 leading-relaxed">
+                        Whether you are planning a private luxury residence, a commercial headquarters, or a bespoke interior renovation, our studio leads the journey from concept to reality.
+                    </p>
+                </div>
+
+                <div class="space-y-6 text-xs tracking-wider font-light text-warmgray border-t border-warmgray/20 pt-6">
+                    <div>
+                        <span class="text-bronze uppercase block text-[10px] font-semibold tracking-widest mb-1">Global Head Studio</span>
+                        <p class="text-alabaster">NEOMEN Tower, Level 14, Golf Course Road, Gurugram / New Delhi</p>
+                    </div>
+                    <div>
+                        <span class="text-bronze uppercase block text-[10px] font-semibold tracking-widest mb-1">Direct Inquiries</span>
+                        <p class="text-alabaster">+91 (011) 4890 2200 • concierges@neomen.in</p>
+                    </div>
+                    <div>
+                        <span class="text-bronze uppercase block text-[10px] font-semibold tracking-widest mb-1">Regional Presence</span>
+                        <p class="text-alabaster">Mumbai • Bengaluru • Dubai (D3)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Form -->
+            <div class="lg:col-span-7 bg-warmgray/5 p-8 md:p-12 border border-warmgray/20">
+                <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-bronze font-semibold mb-2">Full Name *</label>
+                            <input type="text" required placeholder="e.g. Vikramaditya Singhania" class="w-full bg-charcoal border border-warmgray/30 p-3 text-xs text-alabaster focus:outline-none focus:border-bronze">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-bronze font-semibold mb-2">Email Address *</label>
+                            <input type="email" required placeholder="e.g. vikram@estate.com" class="w-full bg-charcoal border border-warmgray/30 p-3 text-xs text-alabaster focus:outline-none focus:border-bronze">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-bronze font-semibold mb-2">Phone Number *</label>
+                            <input type="tel" required placeholder="+91 98765 43210" class="w-full bg-charcoal border border-warmgray/30 p-3 text-xs text-alabaster focus:outline-none focus:border-bronze">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-bronze font-semibold mb-2">Project Location</label>
+                            <input type="text" placeholder="e.g. Goa / New Delhi" class="w-full bg-charcoal border border-warmgray/30 p-3 text-xs text-alabaster focus:outline-none focus:border-bronze">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-bronze font-semibold mb-2">Project Brief & Vision</label>
+                        <textarea rows="4" placeholder="Describe the scale, site conditions, and design vision for your project..." class="w-full bg-charcoal border border-warmgray/30 p-3 text-xs text-alabaster focus:outline-none focus:border-bronze"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-bronze text-alabaster text-xs tracking-widest uppercase hover:bg-alabaster hover:text-charcoal transition-all font-semibold">
+                        Submit Architectural Inquiry
+                    </button>
+                    
+                    <div id="formStatus" class="hidden text-xs text-center text-bronze font-light pt-2">
+                        ✓ Thank you. Our principal concierge will contact you within 24 hours.
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-charcoal text-warmgray py-12 px-6 md:px-16 border-t border-warmgray/20 text-xs">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <span class="font-serif-title text-xl text-alabaster tracking-widest">NEOMEN</span>
+                <span class="text-[10px]">© 2026 NEOMEN ARCHITECTS STUDIO. ALL RIGHTS RESERVED.</span>
+            </div>
+            
+            <div class="flex space-x-8 tracking-widest uppercase text-[10px]">
+                <a href="#" class="hover:text-bronze transition-colors">Instagram</a>
+                <a href="#" class="hover:text-bronze transition-colors">LinkedIn</a>
+                <a href="#" class="hover:text-bronze transition-colors">Architectural Digest</a>
+                <a href="#" class="hover:text-bronze transition-colors">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE PROJECT MODAL CONTAINER -->
+    <div id="projectModal" class="fixed inset-0 bg-charcoal/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 md:p-10">
+        <div class="bg-alabaster max-w-4xl w-full max-h-[90vh] overflow-y-auto relative p-6 md:p-12 text-charcoal">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-charcoal hover:text-bronze focus:outline-none">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            <div id="modalContent">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CONTROLLERS -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // 1. Mobile Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        // 2. Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('glass-panel', 'shadow-sm', 'py-4');
+                navbar.classList.remove('py-6');
+            } else {
+                navbar.classList.remove('glass-panel', 'shadow-sm', 'py-4');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // 3. Hero Slider Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('#sliderDots button');
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('opacity-100');
+            slides[currentSlide].classList.add('opacity-0');
+            dots[currentSlide].classList.remove('bg-alabaster');
+            dots[currentSlide].classList.add('bg-warmgray/40');
+
+            currentSlide = index;
+
+            slides[currentSlide].classList.remove('opacity-0');
+            slides[currentSlide].classList.add('opacity-100');
+            dots[currentSlide].classList.remove('bg-warmgray/40');
+            dots[currentSlide].classList.add('bg-alabaster');
+        }
+
+        setInterval(() => {
+            let next = (currentSlide + 1) % slides.length;
+            goToSlide(next);
+        }, 6000);
+
+        // 4. Portfolio Category Filter
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-charcoal', 'text-alabaster', 'active-filter');
+                    b.classList.add('border-sandstone', 'text-charcoal');
+                });
+                btn.classList.add('bg-charcoal', 'text-alabaster', 'active-filter');
+
+                const cat = btn.getAttribute('data-category');
+                projectCards.forEach(card => {
+                    if (cat === 'all' || card.getAttribute('data-category') === cat) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 5. Interactive Material Atelier Data
+        const materialsData = {
+            travertine: {
+                title: "Italian Roman Travertine",
+                desc: "Sourced directly from quarries in Tivoli, Italy. Unfilled or custom honed for master bathroom vanities and luxury exterior cladding.",
+                img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1200&auto=format&fit=crop"
+            },
+            brass: {
+                title: "Patinated Aged Brass",
+                desc: "Hand-rubbed architectural bronze and brass accents designed to react with age, creating deep tactile warm tones on hardware and light fixtures.",
+                img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop"
+            },
+            oak: {
+                title: "Smoked European White Oak",
+                desc: "Fumed white oak millwork with deep wire-brushed graining. Perfect for full-height architectural doors and bespoke library paneling.",
+                img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1200&auto=format&fit=crop"
+            },
+            concrete: {
+                title: "Board-Formed Architectural Concrete",
+                desc: "Exposed structural wall panels preserving timber grain texture, balancing modern industrialism with warm tactile warmth.",
+                img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop"
+            }
+        };
+
+        function selectMaterial(matKey) {
+            const data = materialsData[matKey];
+            const imgEl = document.getElementById('materialPreviewImg');
+            imgEl.style.opacity = '0';
+
+            // Reset active button states
+            document.querySelectorAll('.mat-btn').forEach(b => {
+                b.classList.remove('bg-warmgray/10', 'border-bronze');
+            });
+            document.getElementById(`mat-btn-${matKey}`).classList.add('bg-warmgray/10', 'border-bronze');
+
+            setTimeout(() => {
+                imgEl.src = data.img;
+                document.getElementById('materialTitle').innerText = data.title;
+                document.getElementById('materialDesc').innerText = data.desc;
+                imgEl.style.opacity = '1';
+            }, 300);
+        }
+
+        // 6. Project Budget Estimator
+        function calculateEstimate() {
+            const type = document.getElementById('estType').value;
+            const area = parseInt(document.getElementById('estArea').value);
+            const tier = parseFloat(document.getElementById('estTier').value);
+
+            document.getElementById('areaVal').innerText = area.toLocaleString() + " Sq. Ft.";
+
+            let ratePerSqFt = 3500; // Base rate in INR per sqft
+            if (type === 'interior') ratePerSqFt = 4500;
+            if (type === 'turnkey') ratePerSqFt = 8500;
+
+            let baseCost = area * ratePerSqFt * tier;
+            let minCr = (baseCost * 0.9 / 10000000).toFixed(2);
+            let maxCr = (baseCost * 1.15 / 10000000).toFixed(2);
+
+            document.getElementById('estResult').innerText = `₹${minCr} Cr – ₹${maxCr} Cr`;
+        }
+
+        // 7. Interactive Project Detail Modal
+        const modalData = {
+            'villa-aurora': {
+                title: "Villa Aurora",
+                location: "Goa Coast",
+                category: "Luxury Residential Architecture",
+                area: "12,500 Sq. Ft.",
+                img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200&auto=format&fit=crop",
+                description: "Perched over the Arabian ocean bluff, Villa Aurora is an architectural masterwork crafted from raw board-formed concrete and teakwood louvers. The structure features a 25-meter infinity pool that merges seamlessly with the sea horizon."
+            },
+            'stone-sanctuary': {
+                title: "The Travertine Loft",
+                location: "Worli Sea Face, Mumbai",
+                category: "Boutique Penthouse Interior",
+                area: "6,800 Sq. Ft.",
+                img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop",
+                description: "A serene dual-level penthouse penthouse curated with floor-to-ceiling Roman Travertine walls, integrated warm linear illumination, and hand-selected Italian furniture pieces."
+            },
+            'monolith-hq': {
+                title: "Monolith Headquarters",
+                location: "Bengaluru",
+                category: "Commercial & Corporate Campus",
+                area: "45,000 Sq. Ft.",
+                img: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop",
+                description: "Designed for a modern software innovator, Monolith HQ combines subterranean climate-controlled courtyards with recycled steel shade structures to achieve net-zero carbon efficiency."
+            },
+            'teak-pavilion': {
+                title: "House of Courtyards",
+                location: "New Delhi Suburbs",
+                category: "Private Luxury Residence",
+                area: "18,000 Sq. Ft.",
+                img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop",
+                description: "A private estate organized around three lush internal garden courtyards. Hand-carved sandstone screen walls protect against summer heat while letting ambient cross-breezes circulate."
+            },
+            'obsidian-kitchen': {
+                title: "Obsidian Culinary Suite",
+                location: "Emirates Hills, Dubai",
+                category: "Boutique Interior",
+                area: "2,200 Sq. Ft.",
+                img: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=1200&auto=format&fit=crop",
+                description: "Featuring a custom 4-meter monolithic black quartz island, concealed hand-patinated brass cabinets, and integrated professional cooking appliances."
+            },
+            'zenith-spa': {
+                title: "Aman Wellness Sanctuary",
+                location: "Udaipur",
+                category: "Commercial Hospitality",
+                area: "28,000 Sq. Ft.",
+                img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1200&auto=format&fit=crop",
+                description: "A serene subterranean spa facility constructed entirely from local black slate stone and warm teakwood accents, featuring reflection pools and private hydrothermal suites."
+            }
+        };
+
+        function openModal(id) {
+            const data = modalData[id];
+            if (!data) return;
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <span class="text-xs uppercase tracking-widest text-bronze font-semibold">${data.category}</span>
+                    <h2 class="font-serif-title text-4xl font-light">${data.title}</h2>
+                    <div class="flex gap-6 text-xs text-warmgray border-y border-sandstone py-3 font-light">
+                        <span>Location: <strong class="text-charcoal">${data.location}</strong></span>
+                        <span>Built-Up Area: <strong class="text-charcoal">${data.area}</strong></span>
+                    </div>
+                    <img src="${data.img}" alt="${data.title}" class="w-full h-[400px] object-cover my-4">
+                    <p class="text-sm text-warmgray font-light leading-relaxed">${data.description}</p>
+                    <div class="pt-4">
+                        <a href="#contact" onclick="closeModal()" class="inline-block px-8 py-3 bg-charcoal text-alabaster text-xs tracking-widest uppercase hover:bg-bronze transition-all">
+                            Inquire About Similar Design
+                        </a>
+                    </div>
+                </div>
+            `;
+            document.getElementById('projectModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('projectModal').classList.add('hidden');
+        }
+
+        // 8. Contact Form Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const status = document.getElementById('formStatus');
+            status.classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('contactForm').reset();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
