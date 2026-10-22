@@ -1526,6 +1526,36 @@
                 window.addEventListener('mouseup', () => {
                     this.isDragging = false;
                 });
+            } else {
+                // Touch gestures for gentle mobile 3D model orbit inspection
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let isTouching = false;
+
+                dom.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) {
+                        isTouching = true;
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                    }
+                }, { passive: true });
+
+                dom.addEventListener('touchmove', (e) => {
+                    if (!isTouching || e.touches.length !== 1) return;
+                    const deltaX = e.touches[0].clientX - touchStartX;
+                    const deltaY = e.touches[0].clientY - touchStartY;
+
+                    this.orbitRotation.y += deltaX * 0.004;
+                    this.orbitRotation.x += deltaY * 0.002;
+                    this.orbitRotation.x = Math.max(-0.15, Math.min(0.20, this.orbitRotation.x));
+
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                dom.addEventListener('touchend', () => {
+                    isTouching = false;
+                }, { passive: true });
             }
         }
 
@@ -1559,10 +1589,10 @@
             this.updateExplosion(this.progress);
 
             if (isMobileOrTouch) {
-                // Rock-solid locked viewing angle on mobile devices: zero tilting, zero rotation
+                // Smooth responsive orientation on mobile touch orbit
                 if (this.houseRoot) {
-                    this.houseRoot.rotation.x = 0;
-                    this.houseRoot.rotation.y = 0;
+                    this.houseRoot.rotation.y = this.orbitRotation.y;
+                    this.houseRoot.rotation.x = this.orbitRotation.x;
                 }
             } else {
                 this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.05;
