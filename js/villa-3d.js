@@ -220,37 +220,86 @@
             travTex.repeat.set(3, 3);
             this.textures.travertine = travTex;
 
-            // 5. Natural Sage Meadow Grass Ground Texture (1024x1024)
+            // 5. Vibrant Light-Green Architectural Lawn Texture (1024x1024)
             const canvasMeadow = document.createElement('canvas');
             canvasMeadow.width = 1024;
             canvasMeadow.height = 1024;
             const ctxM = canvasMeadow.getContext('2d');
-            ctxM.fillStyle = '#8E9A75'; // Soft sage-olive meadow grass
+            // Luminous fresh sunlit light-green base
+            ctxM.fillStyle = '#9BD866';
             ctxM.fillRect(0, 0, 1024, 1024);
 
-            // Natural organic grass stipples and tones
-            for (let i = 0; i < 6000; i++) {
-                const rx = Math.random() * 1024;
-                const ry = Math.random() * 1024;
-                const rw = Math.random() * 4 + 1;
-                const rh = Math.random() * 5 + 1;
-                const randChoice = Math.random();
-                if (randChoice < 0.35) {
-                    ctxM.fillStyle = 'rgba(115, 128, 96, 0.35)'; // deeper olive
-                } else if (randChoice < 0.7) {
-                    ctxM.fillStyle = 'rgba(164, 178, 140, 0.38)'; // lighter sage
-                } else {
-                    ctxM.fillStyle = 'rgba(202, 198, 160, 0.25)'; // warm straw sunlight accent
-                }
-                ctxM.fillRect(rx, ry, rw, rh);
+            // Clean architectural manicured turf stripes (lawn mower sod bands)
+            for (let x = 0; x < 1024; x += 96) {
+                ctxM.fillStyle = ((x / 96) % 2 === 0) ? 'rgba(142, 212, 86, 0.35)' : 'rgba(172, 238, 118, 0.35)';
+                ctxM.fillRect(x, 0, 96, 1024);
             }
+
+            // High-density organic grass blades and fine turf needles
+            for (let i = 0; i < 16000; i++) {
+                const gx = Math.random() * 1024;
+                const gy = Math.random() * 1024;
+                const gh = Math.random() * 9 + 3;
+                const slant = (Math.random() - 0.5) * 4;
+                const colors = ['#A8EA6E', '#B8F280', '#88CE52', '#76B842', '#C6F692', '#94D85C'];
+                ctxM.strokeStyle = colors[Math.floor(Math.random() * colors.length)];
+                ctxM.lineWidth = Math.random() > 0.65 ? 1.5 : 1.0;
+                ctxM.beginPath();
+                ctxM.moveTo(gx, gy);
+                ctxM.lineTo(gx + slant, gy - gh);
+                ctxM.stroke();
+            }
+
+            // Micro turf texture stipples
+            for (let i = 0; i < 8000; i++) {
+                const sx = Math.random() * 1024;
+                const sy = Math.random() * 1024;
+                ctxM.fillStyle = Math.random() > 0.5 ? 'rgba(215, 252, 160, 0.45)' : 'rgba(92, 150, 48, 0.3)';
+                ctxM.fillRect(sx, sy, Math.random() * 3 + 1, Math.random() * 3 + 1);
+            }
+
             const meadowTex = new THREE.CanvasTexture(canvasMeadow);
             meadowTex.wrapS = THREE.RepeatWrapping;
             meadowTex.wrapT = THREE.RepeatWrapping;
-            meadowTex.repeat.set(8, 8);
+            meadowTex.repeat.set(22, 22);
             this.textures.meadow = meadowTex;
 
-            // 6. Dark Quartz Countertop
+            // 6. Architectural Pine / Spruce Foliage Texture (512x512)
+            const canvasFoliage = document.createElement('canvas');
+            canvasFoliage.width = 512;
+            canvasFoliage.height = 512;
+            const ctxF = canvasFoliage.getContext('2d');
+            ctxF.fillStyle = '#486834'; // Deep alpine conifer green
+            ctxF.fillRect(0, 0, 512, 512);
+
+            // Horizontal foliage tier shadows and needle bands
+            for (let y = 0; y < 512; y += 16) {
+                ctxF.fillStyle = 'rgba(28, 42, 20, 0.45)';
+                ctxF.fillRect(0, y, 512, 5);
+                ctxF.fillStyle = 'rgba(128, 172, 92, 0.35)';
+                ctxF.fillRect(0, y + 5, 512, 3);
+            }
+
+            // Fine pine needles
+            for (let i = 0; i < 10000; i++) {
+                const fx = Math.random() * 512;
+                const fy = Math.random() * 512;
+                const flen = Math.random() * 8 + 3;
+                const fCol = ['#5E8442', '#729E52', '#86B662', '#3A5428', '#A2CE7E'];
+                ctxF.strokeStyle = fCol[Math.floor(Math.random() * fCol.length)];
+                ctxF.lineWidth = 1;
+                ctxF.beginPath();
+                ctxF.moveTo(fx, fy);
+                ctxF.lineTo(fx + (Math.random() - 0.5) * 5, fy + flen);
+                ctxF.stroke();
+            }
+            const foliageTex = new THREE.CanvasTexture(canvasFoliage);
+            foliageTex.wrapS = THREE.RepeatWrapping;
+            foliageTex.wrapT = THREE.RepeatWrapping;
+            foliageTex.repeat.set(3, 3);
+            this.textures.foliage = foliageTex;
+
+            // 7. Dark Quartz Countertop
             const canvasQuartz = document.createElement('canvas');
             canvasQuartz.width = 512;
             canvasQuartz.height = 512;
@@ -316,11 +365,11 @@
             ctxP.closePath();
             ctxP.fill();
 
-            // Layer 3: Near rolling hillside meadow terrain
+            // Layer 3: Near rolling hillside meadow terrain in sunlit light green
             const hillGrad = ctxP.createLinearGradient(0, 560, 0, 1024);
-            hillGrad.addColorStop(0, '#7F8D6F');
-            hillGrad.addColorStop(0.4, '#6B7A5C');
-            hillGrad.addColorStop(1.0, '#4E5B42');
+            hillGrad.addColorStop(0, '#86B064'); // Light green rolling hillcrest
+            hillGrad.addColorStop(0.35, '#729C52'); // Lush meadow hillside
+            hillGrad.addColorStop(1.0, '#4E7436'); // Deep forest base
             ctxP.fillStyle = hillGrad;
             ctxP.beginPath();
             ctxP.moveTo(0, 595);
@@ -410,11 +459,11 @@
                 metalness: 0.05
             });
 
-            // Soft sage-olive natural meadow ground material
+            // Vibrant light-green natural lawn with rich surface texture
             this.matMeadow = new THREE.MeshStandardMaterial({
-                color: 0x8E9A75,
+                color: 0xFFFFFF, // Full 100% luminous brightness so the light green texture shines
                 map: this.textures.meadow,
-                roughness: 0.88,
+                roughness: 0.72,
                 metalness: 0.0
             });
 
@@ -465,14 +514,24 @@
                 metalness: 0.75
             });
 
-            // Stylized architectural evergreen conifer/pine foliage in soft sage-olive
+            // Architectural conifer evergreen pine foliage with needle texture
             this.matFoliage = new THREE.MeshStandardMaterial({
-                color: 0x7E966B, // Soft sage-olive green matching screenshot
-                roughness: 0.82,
+                color: 0x6E9252, // Healthy architectural pine foliage matching reference
+                map: this.textures.foliage,
+                roughness: 0.68,
                 metalness: 0.0
             });
+
+            // Sunlit flared skirt edge rim for tree cone tiers
+            this.matFoliageRim = new THREE.MeshStandardMaterial({
+                color: 0x90B86C, // Sunlit conifer needle tips on tier skirts
+                map: this.textures.foliage,
+                roughness: 0.62,
+                metalness: 0.0
+            });
+
             this.matTrunk = new THREE.MeshStandardMaterial({
-                color: 0x48382B,
+                color: 0x423022,
                 roughness: 0.88
             });
 
@@ -1047,21 +1106,30 @@
 
             // 4 overlapping flared conical tiers matching the architectural rendering in reference image
             const tiers = [
-                { r: 1.25, h: 1.15, y: 1.35 },
-                { r: 1.02, h: 1.05, y: 2.10 },
-                { r: 0.78, h: 0.95, y: 2.80 },
-                { r: 0.52, h: 0.85, y: 3.40 }
+                { r: 1.30, h: 1.15, y: 1.35 },
+                { r: 1.05, h: 1.05, y: 2.10 },
+                { r: 0.80, h: 0.95, y: 2.80 },
+                { r: 0.54, h: 0.85, y: 3.40 }
             ];
 
             for (let t of tiers) {
                 const cone = new THREE.Mesh(
-                    new THREE.ConeGeometry(t.r, t.h, 10),
+                    new THREE.ConeGeometry(t.r, t.h, 12),
                     this.matFoliage
                 );
                 cone.position.y = t.y;
                 cone.castShadow = true;
                 cone.receiveShadow = true;
                 tree.add(cone);
+
+                // Flared sunlit rim ring at the base of each skirt tier
+                const rim = new THREE.Mesh(
+                    new THREE.CylinderGeometry(t.r * 1.015, t.r * 1.015, 0.07, 12, 1, true),
+                    this.matFoliageRim
+                );
+                rim.position.y = t.y - (t.h / 2) + 0.035;
+                rim.castShadow = true;
+                tree.add(rim);
             }
             return tree;
         }
