@@ -72,7 +72,10 @@
             // 8. Event Listeners
             this.bindEvents();
 
-            // 9. Start Render Loop
+            // 9. Initial Responsive Camera & Model Framing
+            this.updateResponsiveCamera();
+
+            // 10. Start Render Loop
             this.animate = this.animate.bind(this);
             requestAnimationFrame(this.animate);
         }
@@ -1248,12 +1251,61 @@
             const easedSub = this.easeOutCubic(subDrop);
             this.subterraneanGroup.position.y = this.initialPositions.subterraneanY - easedSub * 3.0;
 
-            // 7. Dynamic Camera Elevation & Framing during explosion
-            const camProgress = this.easeOutCubic(progress);
-            this.camera.position.x = this.initialCameraPos.x + camProgress * 4.8;
-            this.camera.position.y = this.initialCameraPos.y + camProgress * 4.2;
-            this.camera.position.z = this.initialCameraPos.z + camProgress * 3.8;
-            this.cameraTarget.y = 3.8 + camProgress * 2.4;
+            // 7. Stable Camera Framing: The viewing angle remains fixed throughout scrolling.
+            // Scroll progress exclusively drives the architectural component explosion without tilting or shifting.
+        }
+
+        // --- RESPONSIVE CAMERA & MOBILE COMPOSITION ---
+        updateResponsiveCamera() {
+            if (!this.container || !this.camera || !this.renderer) return;
+
+            const width = this.container.clientWidth || window.innerWidth;
+            const height = this.container.clientHeight || window.innerHeight;
+            const aspect = width / height;
+
+            this.camera.aspect = aspect;
+
+            if (aspect < 0.75) {
+                // Mobile Portrait (e.g. 375x812, 390x844, 430x932)
+                // Optimal scale ensuring assembled villa is ~45% width, exploded villa is ~76% width
+                const mobileScale = Math.min(0.40, Math.max(0.34, aspect * 0.85));
+                if (this.houseRoot) {
+                    this.houseRoot.scale.setScalar(mobileScale);
+                    this.houseRoot.rotation.set(0, 0, 0);
+                }
+                this.camera.fov = 38;
+                // Target positioned to center the house in the visible window between top nav and bottom HUD
+                this.cameraTarget.set(0.2, 2.0, 0);
+                // Distance multiplier along exact axonometric line of sight
+                const distMult = 1.45;
+                this.camera.position.set(30 * distMult, 2.0 + 12.2 * distMult, 32 * distMult);
+            } else if (aspect < 1.15) {
+                // Tablet portrait / square viewports (e.g. 768x1024, iPad portrait)
+                const tabletScale = 0.54;
+                if (this.houseRoot) {
+                    this.houseRoot.scale.setScalar(tabletScale);
+                    this.houseRoot.rotation.set(0, 0, 0);
+                }
+                this.camera.fov = 36;
+                this.cameraTarget.set(0, 3.0, 0);
+                const distMult = 1.25;
+                this.camera.position.set(30 * distMult, 3.0 + 12.2 * distMult, 32 * distMult);
+            } else {
+                // Desktop / Landscape
+                const landscapeScale = height < 520 ? 0.78 : 1.0;
+                if (this.houseRoot) {
+                    this.houseRoot.scale.setScalar(landscapeScale);
+                }
+                this.camera.fov = 34;
+                this.cameraTarget.set(0, 3.8, 0);
+                const distMult = 1.05;
+                this.camera.position.set(30 * distMult, 3.8 + 12.2 * distMult, 32 * distMult);
+            }
+
+            this.camera.updateProjectionMatrix();
+            this.camera.lookAt(this.cameraTarget);
+            this.renderer.setSize(width, height);
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         }
 
         // --- EASING FUNCTIONS ---
@@ -1268,90 +1320,94 @@
         // --- INTERACTION & EVENTS ---
 
         bindEvents() {
-            window.addEventListener('resize', () => {
-                const width = this.container.clientWidth || window.innerWidth;
-                const height = this.container.clientHeight || window.innerHeight;
-                this.camera.aspect = width / height;
-                this.camera.updateProjectionMatrix();
-                this.renderer.setSize(width, height);
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (this.isDragging) return;
-                this.mouse.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
-                this.mouse.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+            const handleResize = () => {
+                this.updateResponsiveCamera();
+            };
+            window.addEventListener('resize', handleResize);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(handleResize, 100);
             });
 
             const dom = this.renderer.domElement;
-            dom.addEventListener('mousedown', (e) => {
-                this.isDragging = true;
-                this.previousMousePosition = { x: e.clientX, y: e.clientY };
-            });
+            dom.style.touchAction = 'pan-y';
 
-            window.addEventListener('mousemove', (e) => {
-                if (!this.isDragging) return;
-                const deltaX = e.clientX - this.previousMousePosition.x;
-                const deltaY = e.clientY - this.previousMousePosition.y;
+            // Only bind mouse drag & hover parallax on desktop with a fine pointer (mouse)
+            const hasFinePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
 
-                this.orbitRotation.y += deltaX * 0.005;
-                this.orbitRotation.x += deltaY * 0.005;
-                this.orbitRotation.x = Math.max(-0.4, Math.min(0.6, this.orbitRotation.x));
+            if (hasFinePointer) {
+                window.addEventListener('mousemove', (e) => {
+                    if (this.isDragging) return;
+                    this.mouse.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+                    this.mouse.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+                });
 
-                this.previousMousePosition = { x: e.clientX, y: e.clientY };
-            });
-
-            window.addEventListener('mouseup', () => {
-                this.isDragging = false;
-            });
-
-            dom.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 1) {
+                dom.addEventListener('mousedown', (e) => {
+                    if (e.button !== 0) return;
                     this.isDragging = true;
-                    this.previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-                }
-            });
+                    this.previousMousePosition = { x: e.clientX, y: e.clientY };
+                });
 
-            window.addEventListener('touchmove', (e) => {
-                if (!this.isDragging || e.touches.length !== 1) return;
-                const deltaX = e.touches[0].clientX - this.previousMousePosition.x;
-                const deltaY = e.touches[0].clientY - this.previousMousePosition.y;
+                window.addEventListener('mousemove', (e) => {
+                    if (!this.isDragging) return;
+                    const deltaX = e.clientX - this.previousMousePosition.x;
+                    const deltaY = e.clientY - this.previousMousePosition.y;
 
-                this.orbitRotation.y += deltaX * 0.006;
-                this.orbitRotation.x += deltaY * 0.006;
-                this.orbitRotation.x = Math.max(-0.4, Math.min(0.6, this.orbitRotation.x));
+                    this.orbitRotation.y += deltaX * 0.003;
+                    this.orbitRotation.x += deltaY * 0.003;
+                    this.orbitRotation.x = Math.max(-0.25, Math.min(0.35, this.orbitRotation.x));
 
-                this.previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            });
+                    this.previousMousePosition = { x: e.clientX, y: e.clientY };
+                });
 
-            window.addEventListener('touchend', () => {
-                this.isDragging = false;
-            });
+                window.addEventListener('mouseup', () => {
+                    this.isDragging = false;
+                });
+            }
         }
 
         resetHome() {
             this.targetProgress = 0;
+            this.progress = 0;
             this.orbitRotation.x = 0;
             this.orbitRotation.y = 0;
             this.mouse.targetX = 0;
             this.mouse.targetY = 0;
+            this.mouse.x = 0;
+            this.mouse.y = 0;
+            if (this.houseRoot) {
+                this.houseRoot.rotation.set(0, 0, 0);
+            }
+            this.updateResponsiveCamera();
+            this.updateExplosion(0);
         }
 
         animate() {
             requestAnimationFrame(this.animate);
 
-            this.progress += (this.targetProgress - this.progress) * 0.08;
-            if (Math.abs(this.targetProgress - this.progress) < 0.0005) {
+            const isMobileOrTouch = window.innerWidth < 768 || (this.camera && this.camera.aspect < 1.0) || (('ontouchstart' in window) && !window.matchMedia('(pointer: fine)').matches);
+            const lerpSpeed = isMobileOrTouch ? 0.12 : 0.08;
+
+            this.progress += (this.targetProgress - this.progress) * lerpSpeed;
+            if (Math.abs(this.targetProgress - this.progress) < 0.0004) {
                 this.progress = this.targetProgress;
             }
 
             this.updateExplosion(this.progress);
 
-            this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.05;
-            this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.05;
+            if (isMobileOrTouch) {
+                // Rock-solid locked viewing angle on mobile devices: zero tilting, zero rotation
+                if (this.houseRoot) {
+                    this.houseRoot.rotation.x = 0;
+                    this.houseRoot.rotation.y = 0;
+                }
+            } else {
+                this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.05;
+                this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.05;
 
-            if (this.houseRoot) {
-                this.houseRoot.rotation.y = this.orbitRotation.y + this.mouse.x * 0.08;
-                this.houseRoot.rotation.x = this.orbitRotation.x + this.mouse.y * 0.04;
+                if (this.houseRoot) {
+                    this.houseRoot.rotation.y = this.orbitRotation.y + this.mouse.x * 0.025;
+                    this.houseRoot.rotation.x = this.orbitRotation.x + this.mouse.y * 0.012;
+                }
             }
 
             this.camera.lookAt(this.cameraTarget);
