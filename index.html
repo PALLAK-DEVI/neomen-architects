@@ -92,8 +92,12 @@
                 </button>
             </div>
 
-            <!-- Top Right: Studio Identity & Reference Storyboard Trigger -->
-            <div class="flex items-center space-x-4 pointer-events-auto">
+            <!-- Top Right: Mode Switcher, Studio Identity & Reference Storyboard Trigger -->
+            <div class="flex items-center space-x-3 pointer-events-auto">
+                <div class="bg-charcoal/85 backdrop-blur-md p-1 border border-sandstone/30 flex items-center text-[10px] tracking-widest uppercase font-mono shadow-md">
+                    <button id="mode3DBtn" class="px-3 py-1.5 bg-bronze text-alabaster transition-all cursor-pointer font-medium" title="Interactive 3D WebGL Model">3D Model</button>
+                    <button id="modePhotoBtn" class="px-3 py-1.5 text-warmgray hover:text-alabaster transition-all cursor-pointer font-medium" title="Photorealistic Architectural Render View">Photorealistic CGI</button>
+                </div>
                 <div class="text-right hidden sm:block">
                     <span class="font-serif-title text-xl font-light tracking-widest text-charcoal uppercase">NEOMEN STUDIO</span>
                     <span class="block text-[10px] tracking-widest text-bronze uppercase font-mono">Villa Solstice • 3D Cutaway</span>
@@ -110,6 +114,13 @@
         <div class="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
             <!-- Canvas Container -->
             <div id="webglContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+            <!-- Photorealistic CGI Cutaway Stage Viewer (Active in Photorealistic Mode) -->
+            <div id="photoCgiContainer" class="absolute inset-0 z-10 hidden flex items-center justify-center p-4 md:p-8 pointer-events-none transition-opacity duration-700">
+                <div class="relative max-w-4xl w-full h-[75vh] flex items-center justify-center">
+                    <img id="cgiStageImg" src="assets/stages/stage_1_assembled.jpg" alt="Photorealistic Villa Cutaway" class="max-h-full max-w-full object-contain filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 rounded-sm">
+                </div>
+            </div>
 
             <!-- Stage HUD (Bottom Left) -->
             <div class="absolute bottom-8 left-6 md:left-12 z-20 pointer-events-none max-w-sm md:max-w-md">
@@ -956,9 +967,57 @@
                         stageTitle.textContent = data.title;
                         stageDesc.textContent = data.desc;
                     }
+                    if (activeViewMode === 'photo') {
+                        updateCgiStage(stageNum);
+                    }
                 }
             });
         }
+
+        // View Mode Toggle (3D Interactive vs Photorealistic CGI)
+        let activeViewMode = '3d';
+        const mode3DBtn = document.getElementById('mode3DBtn');
+        const modePhotoBtn = document.getElementById('modePhotoBtn');
+        const photoCgiContainer = document.getElementById('photoCgiContainer');
+        const cgiStageImg = document.getElementById('cgiStageImg');
+
+        const cgiStageImages = {
+            1: "assets/stages/stage_1_assembled.jpg",
+            2: "assets/stages/stage_2_roof_lift.jpg",
+            3: "assets/stages/stage_3_walls_separate.jpg",
+            4: "assets/stages/stage_4_floors_separate.jpg",
+            5: "assets/stages/stage_5_final_reveal.jpg"
+        };
+
+        function setViewMode(mode) {
+            activeViewMode = mode;
+            if (mode === '3d') {
+                mode3DBtn.classList.add('bg-bronze', 'text-alabaster');
+                mode3DBtn.classList.remove('text-warmgray');
+                modePhotoBtn.classList.remove('bg-bronze', 'text-alabaster');
+                modePhotoBtn.classList.add('text-warmgray');
+                photoCgiContainer.classList.add('hidden');
+                webglContainer.style.opacity = '1';
+            } else {
+                modePhotoBtn.classList.add('bg-bronze', 'text-alabaster');
+                modePhotoBtn.classList.remove('text-warmgray');
+                mode3DBtn.classList.remove('bg-bronze', 'text-alabaster');
+                mode3DBtn.classList.add('text-warmgray');
+                photoCgiContainer.classList.remove('hidden');
+                webglContainer.style.opacity = '0.25';
+                const stage = villaScene ? villaScene.currentStage : 1;
+                updateCgiStage(stage);
+            }
+        }
+
+        function updateCgiStage(stage) {
+            if (cgiStageImg && cgiStageImages[stage]) {
+                cgiStageImg.src = cgiStageImages[stage];
+            }
+        }
+
+        mode3DBtn?.addEventListener('click', () => setViewMode('3d'));
+        modePhotoBtn?.addEventListener('click', () => setViewMode('photo'));
 
         // Continuous Bidirectional Scroll Synchronization
         function handleLandingScroll() {
